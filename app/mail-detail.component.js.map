@@ -1,0 +1,1 @@
+{"version":3,"file":"mail-detail.component.js","sourceRoot":"","sources":["mail-detail.component.ts"],"names":[],"mappings":";;;;;;;;;;AAAA,qBAAiC,eAAe,CAAC,CAAA;AAEjD,qBAAqB,QAAQ,CAAC,CAAA;AAM9B;IAAA;IAGA,CAAC;IAFG;QAAC,YAAK,EAAE;;qDAAA;IALZ;QAAC,gBAAS,CAAC;YACP,QAAQ,EAAE,gBAAgB;YAC1B,WAAW,EAAE,+BAA+B;SAC/C,CAAC;;2BAAA;IAIF,0BAAC;AAAD,CAAC,AAHD,IAGC;AAHY,2BAAmB,sBAG/B,CAAA"}
