@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 
-import { Hero } from './hero';
+import { Hero } from '../models/hero';
 
 @Component({
     selector: 'my-mail-detail',
-    templateUrl: 'app/mail-detail.template.html'
+    templateUrl: 'app/mail-detail/mail-detail.template.html'
 })
 export class MailDetailComponent {
     @Input()
