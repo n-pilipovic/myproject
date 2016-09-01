@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { HEROES } from './mocks/mock-heroes';
+import { HEROES } from './consts/mock-heroes';
 import { Hero } from './models/hero';
 
 @Injectable()

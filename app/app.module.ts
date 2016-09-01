@@ -4,6 +4,7 @@ import { FormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
+import { MenuComponent} from './menu/menu.component';
 import { MailInboxComponent } from './mail-inbox/mail-inbox.component';
 import { MailDetailComponent } from './mail-detail/mail-detail.component';
 
@@ -15,6 +16,7 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
     ],
     declarations: [ 
         AppComponent,
+        MenuComponent,
         MailInboxComponent,
         MailDetailComponent
     ],
