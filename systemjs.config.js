@@ -8,6 +8,8 @@
     'app':                        'app', // 'dist',
     '@angular':                   'node_modules/@angular',
     'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
+    'angular2-jwt':               'node_modules/angular2-jwt/angular2-jwt.js',
+    // 'auth0':                      'node_modules/auth0-js/index.js',
     'rxjs':                       'node_modules/rxjs',
     'jquery':                     'node_modules/jquery/dist',
     '@ng-bootstrap':              'node_modules/@ng-bootstrap',
@@ -18,6 +20,8 @@
     'app':                        { main: 'main.js',  defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
     'jquery':                     { defaultExtension: 'js' },
+    'angular2-jwt':               { defaultExtension: 'js' },
+    // 'auth0':                      { defaultExtension: 'js' },
     'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
     '@ng-bootstrap/ng-bootstrap': { main: 'index.js', defaultExtension: 'js' }
   };

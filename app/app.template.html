@@ -2,5 +2,11 @@
 
 <h2>My Heroes</h2>
 
+<div class="navbar-header">
+  <a class="navbar-brand" href="#">Auth0 - Angular 2</a>
+  <button class="btn btn-primary btn-margin" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
+  <button class="btn btn-primary btn-margin" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
+</div>
+
 <menu class="col-sm-2"></menu>
 <mail-inbox class="col-sm-10"></mail-inbox>

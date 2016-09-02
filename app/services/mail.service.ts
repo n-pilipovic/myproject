@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { HEROES } from './consts/mock-heroes';
-import { Hero } from './models/hero';
+import { HEROES } from '../consts/mock-heroes';
+import { Hero } from '../models/hero';
 
 @Injectable()
 export class MailService {

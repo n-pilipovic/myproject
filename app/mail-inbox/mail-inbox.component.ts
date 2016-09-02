@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Hero } from '../models/hero';
-import { MailService } from '../mail.service';
+import { MailService } from '../services/mail.service';
 
 @Component({
     selector: 'mail-inbox',
