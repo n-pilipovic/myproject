@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Auth } from '../services/auth.service';
+
 import { Hero } from '../models/hero';
 import { MailService } from '../services/mail.service';
 
 @Component({
+    moduleId: module.id,
     selector: 'mail-inbox',
-    templateUrl: 'app/mail-inbox/mail-inbox.template.html',
-    styleUrls: [ 'app/app.styles.css' ],
+    templateUrl: 'mail-inbox.template.html',
+    // styleUrls: [ 'app.styles.css' ],
     providers: [ MailService ]
 })
 export class MailInboxComponent implements OnInit {
     title = 'My web mail';
     selectedHero: Hero;
-    heroes: Hero[];
+    heroes: any;
+    errorMessage: any;
 
-    constructor(private mailService: MailService) {
-
+    constructor(private mailService: MailService, private auth: Auth) {
     }
 
     ngOnInit() {
-        this.getHeroes();
+        // this.getHeroes();
     }
 
     onSelect(hero: Hero) {
@@ -27,7 +30,10 @@ export class MailInboxComponent implements OnInit {
     }
 
     getHeroes() {
-        this.mailService.getMails().then(heroes => this.heroes = heroes);
+        this.mailService.getAllMails()
+                        .then(
+                            heroes => this.heroes = heroes,
+                            error => this.errorMessage = <any>error);
         // this.mailService.getMailsSlowly().then(heroes => this.heroes = heroes);
     }
  }

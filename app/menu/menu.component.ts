@@ -4,8 +4,9 @@ import { MenuItem } from '../models/menu-item';
 import { MENUITEMS } from '../consts/menu-items';
 
 @Component({
+    moduleId: module.id,
     selector: 'menu',
-    templateUrl: 'app/menu/menu.template.html'
+    templateUrl: 'menu.template.html'
 })
 export class MenuComponent {
     items: MenuItem[] = MENUITEMS;

@@ -1,12 +1,29 @@
 <h1>{{title}}</h1>
+<div class="container">
+  <h2>My Heroes</h2>
 
-<h2>My Heroes</h2>
+  <div class="row">
+    <div class="navbar-header pull-xs-right">
+      <div class="dropdown dropdown-profile" *ngIf="auth.authenticated() && auth.userProfile">
+        <button class="btn btn-secondary dropdown-toggle btn-profile" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img [src]="auth.userProfile.picture + auth.picSize" alt="" class="profile-img">
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item"><strong>Name: </strong> {{auth.userProfile.name}}</a>
+          <a class="dropdown-item"><strong>Email: </strong> {{auth.userProfile.email}}</a>
+          <a class="dropdown-item"><strong>Nickname: </strong> {{auth.userProfile.nickname}}</a>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-margin" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
+      <button class="btn btn-primary btn-margin" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
+    </div>
+  </div>
 
-<div class="navbar-header">
-  <a class="navbar-brand" href="#">Auth0 - Angular 2</a>
-  <button class="btn btn-primary btn-margin" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
-  <button class="btn btn-primary btn-margin" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
+  <div class="row">
+    <menu class="col-sm-2"></menu>
+    <div class="col-sm-10">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
 </div>
-
-<menu class="col-sm-2"></menu>
-<mail-inbox class="col-sm-10"></mail-inbox>
