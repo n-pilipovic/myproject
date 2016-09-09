@@ -1,5 +1,11 @@
 export class Config {
-    AUTH0_CLIENT_ID: string;
-    AUTH0_DOMAIN: string;
-    AUTH0_CALLBACK_URL: string;
+    CLIENT_ID: string;
+    CLIENT_SECRET: string;
+    REDIRECT_URL: string;
+    TOKEN_URL: string;
+    AUTH_URL: string;
+    AUTH_SCOPE: string;
+    APP_STATE: string;
+    RESPONSE_TYPE: string;
+    ACCESS_TYPE: string;
 }

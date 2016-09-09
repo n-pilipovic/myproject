@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 // import { Auth } from '../services/auth.service';
 
@@ -12,17 +16,14 @@ import { Hero } from '../models/hero';
     // styleUrls: [ 'app.styles.css' ],
     // providers: [ MailService ]
 })
-export class MailInboxComponent implements OnInit {
-    title = 'My web mail';
-    selectedHero: Hero;
-    heroes: any;
-    errorMessage: any;
+export class AuthComponent implements OnInit {
+    accessToken: Observable<string>;
 
-    // constructor(private mailService: MailService) {
-    // }
+    constructor(private route: ActivatedRoute) {
+    }
 
     ngOnInit() {
-        // this.getHeroes();
+        this.accessToken = this.route.queryParams.map(params => params['code'] || '');
     }
 
     onSelect(hero: Hero) {

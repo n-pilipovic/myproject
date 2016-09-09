@@ -1,14 +1,19 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { AuthComponent } from '../auth/auth.component';
 import { MailInboxComponent } from '../mail-inbox/mail-inbox.component';
 import { MailDetailComponent } from '../mail-detail/mail-detail.component';
 
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/inbox',
+        redirectTo: '/auth',
         pathMatch: 'full'
+    },
+    {
+        path: 'auth',
+        component: AuthComponent
     },
     {
         path: 'inbox',

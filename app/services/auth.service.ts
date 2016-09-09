@@ -2,56 +2,43 @@
 import { Injectable }      from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt';
 
-import { Auth0Config }     from '../consts/auth0-config';
-
-// Avoid name not found warnings
-declare var Auth0Lock: any;
+import { GoogleConfig }     from '../consts/google-config';
 
 @Injectable()
 export class Auth {
-  // Auth0 options object
-  options = {
-    auth: {
-      params: {
-        connection_scopes: {
-          'google-oauth2': ['email profile https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.compose']
-        }
-      }
-    }
-  };
-  // Configure Auth0
-  lock = new Auth0Lock(Auth0Config.AUTH0_CLIENT_ID, Auth0Config.AUTH0_DOMAIN, this.options);
+
+  // We need this after google redirect with code in query params
+  tokenData = ''.concat('redirect_uri=', GoogleConfig.REDIRECT_URL, '&grant_type=authorization_code', '&client_id=', GoogleConfig.CLIENT_ID, '&client_secret=', GoogleConfig.CLIENT_SECRET);
 
   //Store profile object in auth class
   userProfile: Object;
   picSize: string = '?sz=36';
-  redirectUrl: string;
 
   constructor() {
     // Set userProfile attribute of already saved profile
     this.userProfile = JSON.parse(localStorage.getItem('profile'));
 
     // Add callback for lock `authenticated` event
-    this.lock.on("authenticated", (authResult) => {
-      localStorage.setItem('id_token', authResult.idToken);
-      localStorage.setItem('google_token', authResult.accessToken);
+    // this.lock.on("authenticated", (authResult) => {
+    //   localStorage.setItem('id_token', authResult.idToken);
+    //   localStorage.setItem('google_token', authResult.accessToken);
 
-      // Fetch profile information
-      this.lock.getProfile(authResult.idToken, (error, profile) => {
-        if (error) {
-          // Handle error
-          alert(error);
-          return;
-        }
-        localStorage.setItem('profile', JSON.stringify(profile));
-        this.userProfile = profile;
-      });
-    });
+    //   // Fetch profile information
+    //   this.lock.getProfile(authResult.idToken, (error, profile) => {
+    //     if (error) {
+    //       // Handle error
+    //       alert(error);
+    //       return;
+    //     }
+    //     localStorage.setItem('profile', JSON.stringify(profile));
+    //     this.userProfile = profile;
+    //   });
+    // });
   }
 
   public login() {
-    // Call the show method to display the widget.
-    this.lock.show();
+    // Call the method to redirect to google for getting access token.
+    this.getAccessToken();
   };
 
   public authenticated() {
@@ -67,4 +54,19 @@ export class Auth {
     localStorage.removeItem('profile');
     this.userProfile = undefined;
   };
+
+  private getAccessToken() {
+    window.location.href = this.createTokenUrl();
+  }
+
+  private createTokenUrl():string {
+    var retUrl = GoogleConfig.AUTH_URL;
+    retUrl = retUrl.concat('scope=', GoogleConfig.AUTH_SCOPE,
+                           '&client_id=', GoogleConfig.CLIENT_ID,
+                           '&response_type=', GoogleConfig.RESPONSE_TYPE,
+                           '&state=', GoogleConfig.APP_STATE,
+                           '&redirect_uri=', GoogleConfig.REDIRECT_URL,
+                           '&access_type=', GoogleConfig.ACCESS_TYPE);
+    return retUrl;
+  }
 }
