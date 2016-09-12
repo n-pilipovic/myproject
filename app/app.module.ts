@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { Auth } from './services/auth.service';
 import { routing, appRoutingProviders } from './routing/app.routing';
 
+import { AuthComponent } from './auth/auth.component';
 import { MenuComponent} from './menu/menu.component';
 import { MailInboxComponent } from './mail-inbox/mail-inbox.component';
 import { MailDetailComponent } from './mail-detail/mail-detail.component';
@@ -24,6 +25,7 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
     ],
     declarations: [ 
         AppComponent,
+        AuthComponent,
         MenuComponent,
         MailInboxComponent,
         MailDetailComponent

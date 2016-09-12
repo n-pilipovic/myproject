@@ -38,7 +38,7 @@ export class Auth {
 
   public login() {
     // Call the method to redirect to google for getting access token.
-    this.getAccessToken();
+    this.getAccess();
   };
 
   public authenticated() {
@@ -55,7 +55,7 @@ export class Auth {
     this.userProfile = undefined;
   };
 
-  private getAccessToken() {
+  private getAccess() {
     window.location.href = this.createTokenUrl();
   }
 
