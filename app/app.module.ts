@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -7,10 +8,11 @@ import { AUTH_PROVIDERS } from 'angular2-jwt';
 
 import { AppComponent } from './app.component';
 
-import { Auth } from './services/auth.service';
+import { AuthService } from './services/auth.service';
+import { WindowService } from './services/window.service';
 import { routing, appRoutingProviders } from './routing/app.routing';
 
-import { AuthComponent } from './auth/auth.component';
+import { LoginComponent } from './login/login.component';
 import { MenuComponent} from './menu/menu.component';
 import { MailInboxComponent } from './mail-inbox/mail-inbox.component';
 import { MailDetailComponent } from './mail-detail/mail-detail.component';
@@ -25,7 +27,7 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
     ],
     declarations: [ 
         AppComponent,
-        AuthComponent,
+        LoginComponent,
         MenuComponent,
         MailInboxComponent,
         MailDetailComponent
@@ -33,7 +35,8 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
     providers: [
         appRoutingProviders,
         AUTH_PROVIDERS,
-        Auth
+        WindowService,
+        {provide: LocationStrategy, useClass: HashLocationStrategy}
     ],
     bootstrap: [ AppComponent ]
 })

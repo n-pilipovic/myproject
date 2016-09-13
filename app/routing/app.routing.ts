@@ -1,31 +1,38 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthComponent } from '../auth/auth.component';
+import { AuthGuard } from '../services/auth-guard.service';
+import { AuthService } from '../services/auth.service';
+
+import { LoginComponent } from '../login/login.component';
 import { MailInboxComponent } from '../mail-inbox/mail-inbox.component';
 import { MailDetailComponent } from '../mail-detail/mail-detail.component';
 
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/auth',
+        redirectTo: '/inbox',
         pathMatch: 'full'
     },
     {
-        path: 'auth',
-        component: AuthComponent
+        path: 'login',
+        component: LoginComponent
     },
     {
         path: 'inbox',
-        component: MailInboxComponent
+        component: MailInboxComponent,
+        canActivate: [ AuthGuard ]
     },
     {
         path: 'inbox/:id',
-        component: MailDetailComponent
+        component: MailDetailComponent,
+        canActivate: [ AuthGuard ]
     }
 ];
 
 export const appRoutingProviders: any[] = [
+    AuthGuard,
+    AuthService
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

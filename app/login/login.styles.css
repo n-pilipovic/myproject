@@ -1,0 +1,20 @@
+.profile-img {
+  width: 36px;
+}
+.btn-profile {
+  padding: 0;
+}
+.dropdown-profile {
+  display: inline-block;
+}
+.btn-profile.dropdown-toggle::after {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0;
+  vertical-align: middle;
+  content: none;
+  border-top: 0;
+  border-right: none;
+  border-left: none;
+}

@@ -4,7 +4,7 @@ import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 
-import { Auth } from './auth.service';
+import { AuthService } from './auth.service';
 import { MailHelper } from '../utils/mail.helper';
 import { RecievedMail } from '../models/recieved-mail';
 
@@ -16,7 +16,7 @@ export class MailService {
 
     private GMAIL_ROOT: string = 'https://www.googleapis.com/gmail/v1/users/me';
 
-    constructor(private auth: Auth, private authHttp: AuthHttp) {}
+    constructor(private auth: AuthService, private authHttp: AuthHttp) {}
 
     getAllMails(): any {
         this.authHttp.get(`https://www.googleapis.com/gmail/v1/users/me/messages`).toPromise()

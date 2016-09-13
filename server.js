@@ -9,9 +9,6 @@ app.use('/app', express.static(__dirname + '/app'));
 app.get('/app', function (req, res) {
     res.redirect('/app/index.html');
 });
-app.get('/app/auth/', function (req, res) {
-    res.redirect('/app/index.html');
-});
 
 https.createServer({
     key: fs.readFileSync('./certificates/localhost-key.pem'),

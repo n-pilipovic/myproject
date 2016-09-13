@@ -1,39 +1,49 @@
 /* ===== app/auth.service.ts ===== */
 import { Injectable }      from '@angular/core';
-import { tokenNotExpired } from 'angular2-jwt';
+import { Http, Headers } from '@angular/http';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/Rx';
 
-import { GoogleConfig }     from '../consts/google-config';
+import { GoogleConfig } from '../consts/google-config';
+import { WindowService } from './window.service';
 
 @Injectable()
-export class Auth {
+export class AuthService {
 
-  // We need this after google redirect with code in query params
-  tokenData = ''.concat('redirect_uri=', GoogleConfig.REDIRECT_URL, '&grant_type=authorization_code', '&client_id=', GoogleConfig.CLIENT_ID, '&client_secret=', GoogleConfig.CLIENT_SECRET);
+  private oAuthCallbackUrl: string;
+  private oAuthTokenUrl: string;
+  private oAuthUserUrl: string;
+  private oAuthUserNameField: string;
+  private locationWatcher = new Subject();
+  private authenticated: boolean = false;
+  // used for window session
+  private windowHandle: any = null;
+  private loopCount = 600;
+  private intervalId: any = null;
+  private intervalLength = 100;
 
+  // used for token
+  private token: string;
+  private expires: any = 0; 
+  private expiresTimerId: any = null;
+  
   //Store profile object in auth class
-  userProfile: Object;
-  picSize: string = '?sz=36';
+  public picSize: string = '?sz=36';
+  public redirectUrl: string;
+  public userProfile: any;
 
-  constructor() {
+  constructor(private _window: WindowService, private _http: Http) {
+    this.oAuthCallbackUrl = GoogleConfig.REDIRECT_URL;
+    this.oAuthTokenUrl = GoogleConfig.AUTH_URL;
+    this.oAuthTokenUrl = this.oAuthTokenUrl
+                          .replace('{callbackUrl}', GoogleConfig.REDIRECT_URL)
+                          .replace('{responseType}', GoogleConfig.RESPONSE_TYPE)
+                          .replace('{clientId}', GoogleConfig.CLIENT_ID)
+                          .replace('{scopes}', GoogleConfig.AUTH_SCOPE);
+    this.oAuthUserUrl = GoogleConfig.USER_INFO_URL;
+
     // Set userProfile attribute of already saved profile
     this.userProfile = JSON.parse(localStorage.getItem('profile'));
-
-    // Add callback for lock `authenticated` event
-    // this.lock.on("authenticated", (authResult) => {
-    //   localStorage.setItem('id_token', authResult.idToken);
-    //   localStorage.setItem('google_token', authResult.accessToken);
-
-    //   // Fetch profile information
-    //   this.lock.getProfile(authResult.idToken, (error, profile) => {
-    //     if (error) {
-    //       // Handle error
-    //       alert(error);
-    //       return;
-    //     }
-    //     localStorage.setItem('profile', JSON.stringify(profile));
-    //     this.userProfile = profile;
-    //   });
-    // });
   }
 
   public login() {
@@ -41,32 +51,165 @@ export class Auth {
     this.getAccess();
   };
 
-  public authenticated() {
-    // Check if there's an unexpired JWT
-    // This searches for an item in localStorage with key == 'id_token'
-    return tokenNotExpired();
+  public subscribe(onNext: (value: any) => void, onError?: (exception: any) => void, onComplete?: () => void) {
+      return this.locationWatcher.subscribe(onNext, onError, onComplete);
+  }
+
+  public unsubscribe() {
+    return this.locationWatcher.unsubscribe();
+  }
+
+  public isAuthenticated() {
+    return localStorage.getItem('id_token') ? true : false;
   };
 
   public logout() {
     // Remove token and profile from localStorage
     localStorage.removeItem('id_token');
-    localStorage.removeItem('google_token');
     localStorage.removeItem('profile');
+    this.authenticated = false;
     this.userProfile = undefined;
+    this.expiresTimerId = null;
+    this.expires = 0;
+    this.token = null;
+    this.emitAuthStatus(true);
+    console.log('Session has been cleared');
   };
 
-  private getAccess() {
-    window.location.href = this.createTokenUrl();
+  public getSession() {
+      return {authenticated: this.isAuthenticated(), token: this.token, expires: this.expires};
   }
 
-  private createTokenUrl():string {
-    var retUrl = GoogleConfig.AUTH_URL;
-    retUrl = retUrl.concat('scope=', GoogleConfig.AUTH_SCOPE,
-                           '&client_id=', GoogleConfig.CLIENT_ID,
-                           '&response_type=', GoogleConfig.RESPONSE_TYPE,
-                           '&state=', GoogleConfig.APP_STATE,
-                           '&redirect_uri=', GoogleConfig.REDIRECT_URL,
-                           '&access_type=', GoogleConfig.ACCESS_TYPE);
-    return retUrl;
+  public getUserInfo() {
+        return this.userProfile;
+    }
+
+  private getAccess() {
+    let loopCount = this.loopCount;
+    this.windowHandle = this._window.createWindow(this.oAuthTokenUrl, 'OAuth2 Login');
+
+    this.intervalId = setInterval(() => {
+      // if response from Google is not recieved yet
+      if (loopCount-- < 0) {
+        clearInterval(this.intervalId);
+        this.emitAuthStatus(false);
+        this.windowHandle.close();
+      } else {
+        var href: string;
+        try {
+          href = this.windowHandle.location.href; // check if response from Google is recieved
+        } catch (e) {
+          console.error('Error while waiting response url from Google: ', e);
+        }
+        if (href !== null) {
+          let reg = /access_token=(.*)/;
+          let found = href.match(reg);
+          if (found) {
+            console.log('Callback URL: ', href);
+            clearInterval(this.intervalId);
+            var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
+            var expiresSeconds = Number(pathData.expires_in) || 1800;
+            this.token = pathData.access_token;
+            if (this.token) {
+              localStorage.setItem('id_token', this.token);
+              this.authenticated = true;
+              this.startExpiresTimer(expiresSeconds);
+              this.expires = new Date();
+              this.expires = this.expires.setSeconds(this.expires.getSeconds() + expiresSeconds);
+
+              this.windowHandle.close();
+              this.emitAuthStatus(true);
+              this.fetchUserInfo();
+            } else {
+              this.authenticated = false;
+              this.emitAuthStatus(false); // so we are still going to fail the login
+            }
+          } else {
+            // http://localhost:3000/auth/callback#error=access_denied
+            if (href.indexOf(this.oAuthCallbackUrl) == 0) {
+                clearInterval(this.intervalId);
+                var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
+                this.windowHandle.close();
+                this.emitAuthStatusError(false, pathData);
+            }
+          }
+        }
+      }
+    }, this.intervalLength);
   }
+
+  private emitAuthStatus(success: boolean) {
+        this.emitAuthStatusError(success, null);
+  }
+
+  private emitAuthStatusError(success: boolean, error: any) {
+      this.locationWatcher.next(
+          {
+              success: success,
+              authenticated: this.authenticated,
+              token: localStorage.getItem('id_token'),
+              expires: this.expires,
+              error: error
+          }
+      );
+  }
+
+  private fetchUserInfo() {
+        if (this.token != null) {
+            var headers = new Headers();
+            headers.append('Authorization', `Bearer ${this.token}`);
+            this._http.get(this.oAuthUserUrl, { headers: headers })
+                .map(res => res.json())
+                .subscribe(
+                    info => { this.userProfile = info; 
+                              this.userProfile.image.url = this.userProfile.image.url.replace('?sz=50', '');
+                              localStorage.setItem('profile', JSON.stringify(info));
+                            },
+                    err => console.error("Failed to fetch user info:", err)
+                    );
+        }
+    }
+
+  private parse(str) { // lifted from https://github.com/sindresorhus/query-string
+        if (typeof str !== 'string') {
+            return {};
+        }
+        str = str.trim().replace(/^(\?|#|&)/, '');
+
+        if (!str) {
+            return {};
+        }
+        return str.split('&').reduce(function (ret, param) {
+            var parts = param.replace(/\+/g, ' ').split('=');
+            // Firefox (pre 40) decodes `%3D` to `=`
+            // https://github.com/sindresorhus/query-string/pull/37
+            var key = parts.shift();
+            var val = parts.length > 0 ? parts.join('=') : undefined;
+            key = decodeURIComponent(key);
+            // missing `=` should be `null`:
+            // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+            val = val === undefined ? null : decodeURIComponent(val);
+
+            if (!ret.hasOwnProperty(key)) {
+                ret[key] = val;
+            } else if (Array.isArray(ret[key])) {
+                ret[key].push(val);
+            } else {
+                ret[key] = [ret[key], val];
+            }
+
+            return ret;
+        }, {});
+    }
+
+    private startExpiresTimer(seconds: number) {
+        if (this.expiresTimerId != null) {
+            clearTimeout(this.expiresTimerId);
+        }
+        this.expiresTimerId = setTimeout(() => {
+            console.log('Session has expired');
+            this.logout();
+        }, seconds * 1000); // seconds * 1000
+        console.log('Token expiration timer set for', seconds, "seconds");
+    }
 }
