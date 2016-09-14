@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
-import { AuthHttp } from 'angular2-jwt';
+import { Response, Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -15,13 +14,32 @@ import { Hero } from '../models/hero';
 export class MailService {
 
     private GMAIL_ROOT: string = 'https://www.googleapis.com/gmail/v1/users/me';
+    private recieveMailInFormat: string = 'full';
+    private googleHeader: Headers = new Headers();
+    private mails: Array<{}> = new Array<{}>();
 
-    constructor(private auth: AuthService, private authHttp: AuthHttp) {}
+    constructor(private auth: AuthService, private http: Http, private mailHelper: MailHelper) {
+        this.googleHeader.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
+    }
 
     getAllMails(): any {
-        this.authHttp.get(`https://www.googleapis.com/gmail/v1/users/me/messages`).toPromise()
-                    .then(this.extractData)
-                    .catch(this.handleError);
+        return this.http.get(`${this.GMAIL_ROOT}/messages`, { headers: this.googleHeader })
+                .map(res => {
+                    let requests = [];
+                    for (let message in res.json().messages) {
+                        requests.push(this.http.get(`${this.GMAIL_ROOT}/messages/${res.json().messages[message].id}?format=${this.recieveMailInFormat}`, { headers: this.googleHeader }).map(res => res.json()));
+                    }
+                    Observable.forkJoin(requests).subscribe(data => {
+                        for (let item in data) {
+                            this.mails.push({id: data[item].id, 
+                                             from: this.mailHelper.getHeader(data[item].payload.headers, 'From'), 
+                                             subject: this.mailHelper.getHeader(data[item].payload.headers, 'Subject'),
+                                             date: this.mailHelper.getHeader(data[item].payload.headers, 'Date'),
+                                             body: this.mailHelper.getBody(data[item].payload)});
+                        }
+                        return this.mails;
+                    });
+                });
     }
     
     getMails() {

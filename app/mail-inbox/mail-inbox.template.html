@@ -1,10 +1,16 @@
 <button (click)="getHeroes()">Get Mails</button>
 
 <ul class="heroes">
-    <li *ngFor="let hero of heroes"
+    <li *ngFor="let hero of heroes | async"
         (click)="onSelect(hero)"
         class="col-sm-6">
-        <span class="badge">{{ hero.id }}</span> {{ hero.name }}
+        <div>
+            <div><span class="badge">{{ hero.id }}</span></div> 
+            <div>{{ hero.from }}</div>
+            <div>{{ hero.subject }}</div>
+            <div>{{ hero.date }}</div>
+            <div>{{ hero.body }}</div>
+        </div>
     </li>
 </ul>
 

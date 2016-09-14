@@ -4,12 +4,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AUTH_PROVIDERS } from 'angular2-jwt';
 
 import { AppComponent } from './app.component';
 
 import { AuthService } from './services/auth.service';
 import { WindowService } from './services/window.service';
+import { MailHelper } from './utils/mail.helper';
 import { routing, appRoutingProviders } from './routing/app.routing';
 
 import { LoginComponent } from './login/login.component';
@@ -34,8 +34,8 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
     ],
     providers: [
         appRoutingProviders,
-        AUTH_PROVIDERS,
         WindowService,
+        MailHelper,
         {provide: LocationStrategy, useClass: HashLocationStrategy}
     ],
     bootstrap: [ AppComponent ]
