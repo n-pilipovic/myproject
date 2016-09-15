@@ -24,12 +24,12 @@ export class MailService {
 
     getAllMails(): any {
         return this.http.get(`${this.GMAIL_ROOT}/messages`, { headers: this.googleHeader })
-                .map(res => {
+                .switchMap(res => {
                     let requests = [];
                     for (let message in res.json().messages) {
                         requests.push(this.http.get(`${this.GMAIL_ROOT}/messages/${res.json().messages[message].id}?format=${this.recieveMailInFormat}`, { headers: this.googleHeader }).map(res => res.json()));
                     }
-                    Observable.forkJoin(requests).subscribe(data => {
+                    return Observable.forkJoin(requests).map(data => {
                         for (let item in data) {
                             this.mails.push({id: data[item].id, 
                                              from: this.mailHelper.getHeader(data[item].payload.headers, 'From'), 
@@ -42,22 +42,4 @@ export class MailService {
                 });
     }
     
-    getMails() {
-        return Promise.resolve(HEROES);
-    }
-
-    getMailsSlowly() {
-        return new Promise<Hero[]>(resolve => setTimeout(() => resolve(HEROES), 2000)); // wait for 2 seconds
-    }
-
-    private extractData(res: Response) {
-        let body = res.json();
-        return body.data || {};
-    }
-
-    private handleError(error: any) {
-        let errMsg = (error.message) ? error.message : error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.error(errMsg);
-        return Observable.throw(errMsg);
-    }
 }

@@ -23,7 +23,7 @@ export class MailHelper {
         }
         encodedBody = encodedBody.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
         // escape function is used for special characters
-        return decodeURIComponent(atob(encodedBody));
+        return atob(encodedBody);
     }
     
     public getHTMLPart(parts:Array<any>):string {

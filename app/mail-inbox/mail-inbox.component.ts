@@ -13,26 +13,21 @@ import { MailService } from '../services/mail.service';
     // styleUrls: [ 'app.styles.css' ],
     providers: [ MailService ]
 })
-export class MailInboxComponent implements OnInit {
+export class MailInboxComponent {
     title = 'My web mail';
     selectedHero: Hero;
-    heroes: Observable<Object[]>;
+    mails: Array<Object>;
     errorMessage: any;
 
     constructor(private mailService: MailService) {
-        this.heroes = this.mailService.getAllMails();
-    }
-
-    ngOnInit() {
-        // this.getHeroes();
+        this.mails = new Array<Object>();
     }
 
     onSelect(hero: Hero) {
         this.selectedHero = hero;
     }
 
-    getHeroes() {
-        this.mailService.getAllMails();
-        // this.mailService.getMailsSlowly().then(heroes => this.heroes = heroes);
+    getMails() {
+        this.mailService.getAllMails().subscribe(data => this.mails = data);
     }
  }
