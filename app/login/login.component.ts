@@ -15,11 +15,11 @@ import { Hero } from '../models/hero';
     moduleId: module.id,
     selector: 'app-login',
     templateUrl: 'login.template.html',
-    styleUrls: [ 'login.styles.css' ]
+    styleUrls: ['login.styles.css']
 })
 export class LoginComponent implements OnInit {
 
-    constructor(public auth: AuthService, private router: Router) {}
+    constructor(public auth: AuthService, private router: Router) { }
 
     ngOnInit() {
         if (this.isAuthenticated()) {
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.auth.login();
-        this.router.navigate(['/']);
+        this.router.navigate(['/inbox']);
     }
 
     isAuthenticated(): boolean {
@@ -42,4 +42,4 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/login']);
         }
     }
- }
+}

@@ -1,0 +1,13 @@
+<!--<button (click)="getMails()">Get Mails</button>-->
+
+<ul class="heroes">
+	<li *ngFor="let mail of mails" class="col-sm-12">
+		<!--<span class="badge">{{ mail.id }}</span> -->
+		<span (click)="onSelect(mail)">{{ mail.from }}</span>
+		<span>{{ mail.subject }}</span>
+		<span>{{ mail.date | date:fullDate }}</span>
+		<!--<div><span [innerHtml]="mail.body"></span></div>-->
+	</li>
+</ul>
+
+<!--<my-mail-detail [hero]="selectedHero"></my-mail-detail>-->

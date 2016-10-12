@@ -5,8 +5,6 @@ import { AuthGuard } from '../services/auth-guard.service';
 import { AuthService } from '../services/auth.service';
 
 import { LoginComponent } from '../login/login.component';
-import { MailInboxComponent } from '../mail-inbox/mail-inbox.component';
-import { MailDetailComponent } from '../mail-detail/mail-detail.component';
 
 const appRoutes: Routes = [
     {
@@ -17,16 +15,6 @@ const appRoutes: Routes = [
     {
         path: 'login',
         component: LoginComponent
-    },
-    {
-        path: 'inbox',
-        component: MailInboxComponent,
-        canActivate: [ AuthGuard ]
-    },
-    {
-        path: 'inbox/:id',
-        component: MailDetailComponent,
-        canActivate: [ AuthGuard ]
     }
 ];
 
