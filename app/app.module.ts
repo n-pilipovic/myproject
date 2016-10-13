@@ -8,6 +8,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { InboxModule } from './inbox/inbox.module';
 
+import { MaskEmailPipe } from './pipes/mask-email.pipe';
+
 import { AuthService } from './services/auth.service';
 import { WindowService } from './services/window.service';
 import { MailHelper } from './utils/mail.helper';

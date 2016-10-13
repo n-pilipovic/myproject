@@ -1,0 +1,14 @@
+.emails {
+    padding: 0;
+}
+
+.app-text-wrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.app-item-row {
+    border: 1px solid gainsboro;
+    padding: 8 0;
+}

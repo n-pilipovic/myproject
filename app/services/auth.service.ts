@@ -1,6 +1,7 @@
 /* ===== app/auth.service.ts ===== */
-import { Injectable }      from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/Rx';
 
@@ -10,167 +11,169 @@ import { WindowService } from './window.service';
 @Injectable()
 export class AuthService {
 
-  private oAuthCallbackUrl: string;
-  private oAuthTokenUrl: string;
-  private oAuthUserUrl: string;
-  private oAuthUserNameField: string;
-  private locationWatcher = new Subject();
-  private authenticated: boolean = false;
-  // used for window session
-  private windowHandle: any = null;
-  private loopCount = 600;
-  private intervalId: any = null;
-  private intervalLength = 100;
+    private oAuthCallbackUrl: string;
+    private oAuthTokenUrl: string;
+    private oAuthUserUrl: string;
+    private oAuthUserNameField: string;
+    private locationWatcher = new Subject();
+    private authenticated: boolean = false;
+    // used for window session
+    private windowHandle: any = null;
+    private loopCount = 600;
+    private intervalId: any = null;
+    private intervalLength = 100;
 
-  // used for token
-  private token: string;
-  private expires: any = 0; 
-  private expiresTimerId: any = null;
-  
-  //Store profile object in auth class
-  public picSize: string = '?sz=36';
-  public redirectUrl: string;
-  public userProfile: any;
+    // used for token
+    private token: string;
+    private expires: any = 0;
+    private expiresTimerId: any = null;
 
-  constructor(private _window: WindowService, private _http: Http) {
-    this.oAuthCallbackUrl = GoogleConfig.REDIRECT_URL;
-    this.oAuthTokenUrl = GoogleConfig.AUTH_URL;
-    this.oAuthTokenUrl = this.oAuthTokenUrl
-                          .replace('{callbackUrl}', GoogleConfig.REDIRECT_URL)
-                          .replace('{responseType}', GoogleConfig.RESPONSE_TYPE)
-                          .replace('{clientId}', GoogleConfig.CLIENT_ID)
-                          .replace('{scopes}', GoogleConfig.AUTH_SCOPE);
-    this.oAuthUserUrl = GoogleConfig.USER_INFO_URL;
+    //Store profile object in auth class
+    public picSize: string = '?sz=36';
+    public redirectUrl: string;
+    public userProfile: any;
 
-    // Set userProfile attribute of already saved profile
-    this.userProfile = JSON.parse(localStorage.getItem('profile'));
-  }
+    constructor(private _window: WindowService, private _http: Http, private _router: Router) {
+        this.oAuthCallbackUrl = GoogleConfig.REDIRECT_URL;
+        this.oAuthTokenUrl = GoogleConfig.AUTH_URL;
+        this.oAuthTokenUrl = this.oAuthTokenUrl
+            .replace('{callbackUrl}', GoogleConfig.REDIRECT_URL)
+            .replace('{responseType}', GoogleConfig.RESPONSE_TYPE)
+            .replace('{clientId}', GoogleConfig.CLIENT_ID)
+            .replace('{scopes}', GoogleConfig.AUTH_SCOPE);
+        this.oAuthUserUrl = GoogleConfig.USER_INFO_URL;
 
-  public login() {
-    // Call the method to redirect to google for getting access token.
-    this.getAccess();
-  };
+        // Set userProfile attribute of already saved profile
+        this.userProfile = JSON.parse(localStorage.getItem('profile'));
+    }
 
-  public subscribe(onNext: (value: any) => void, onError?: (exception: any) => void, onComplete?: () => void) {
-      return this.locationWatcher.subscribe(onNext, onError, onComplete);
-  }
+    public login(path) {
+        // Call the method to redirect to google for getting access token.
+        this.getAccess(path);
+    };
 
-  public unsubscribe() {
-    return this.locationWatcher.unsubscribe();
-  }
+    public subscribe(onNext: (value: any) => void, onError?: (exception: any) => void, onComplete?: () => void) {
+        return this.locationWatcher.subscribe(onNext, onError, onComplete);
+    }
 
-  public isAuthenticated() {
-    return localStorage.getItem('id_token') ? true : false;
-  };
+    public unsubscribe() {
+        return this.locationWatcher.unsubscribe();
+    }
 
-  public logout() {
-    // Remove token and profile from localStorage
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('profile');
-    this.authenticated = false;
-    this.userProfile = undefined;
-    this.expiresTimerId = null;
-    this.expires = 0;
-    this.token = null;
-    this.emitAuthStatus(true);
-    console.log('Session has been cleared');
-  };
+    public isAuthenticated() {
+        return localStorage.getItem('id_token') ? true : false;
+    };
 
-  public getSession() {
-      return {authenticated: this.isAuthenticated(), token: this.token, expires: this.expires};
-  }
+    public logout() {
+        // Remove token and profile from localStorage
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('profile');
+        this.authenticated = false;
+        this.userProfile = undefined;
+        this.expiresTimerId = null;
+        this.expires = 0;
+        this.token = null;
+        this.emitAuthStatus(true);
+        console.log('Session has been cleared');
+    };
 
-  public getUserInfo() {
+    public getSession() {
+        return { authenticated: this.isAuthenticated(), token: this.token, expires: this.expires };
+    }
+
+    public getUserInfo() {
         return this.userProfile;
     }
 
-  private getAccess() {
-    let loopCount = this.loopCount;
-    this.windowHandle = this._window.createWindow(this.oAuthTokenUrl, 'OAuth2 Login');
+    private getAccess(path) {
+        let loopCount = this.loopCount;
+        this.windowHandle = this._window.createWindow(this.oAuthTokenUrl, 'OAuth2 Login');
 
-    this.intervalId = setInterval(() => {
-      // if response from Google is not recieved yet
-      if (loopCount-- < 0) {
-        clearInterval(this.intervalId);
-        this.emitAuthStatus(false);
-        this.windowHandle.close();
-      } else {
-        var href: string;
-        try {
-          href = this.windowHandle.location.href; // check if response from Google is recieved
-        } catch (e) {
-          console.error('Error while waiting response url from Google: ', e);
-        }
-        if (href !== null) {
-          let reg = /access_token=(.*)/;
-          let found = href.match(reg);
-          if (found) {
-            console.log('Callback URL: ', href);
-            clearInterval(this.intervalId);
-            var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
-            var expiresSeconds = Number(pathData.expires_in) || 1800;
-            this.token = pathData.access_token;
-            if (this.token) {
-              localStorage.setItem('id_token', this.token);
-              this.authenticated = true;
-              this.startExpiresTimer(expiresSeconds);
-              this.expires = new Date();
-              this.expires = this.expires.setSeconds(this.expires.getSeconds() + expiresSeconds);
-
-              this.windowHandle.close();
-              this.emitAuthStatus(true);
-              this.fetchUserInfo();
-            } else {
-              this.authenticated = false;
-              this.emitAuthStatus(false); // so we are still going to fail the login
-            }
-          } else {
-            // http://localhost:3000/auth/callback#error=access_denied
-            if (href.indexOf(this.oAuthCallbackUrl) == 0) {
+        this.intervalId = setInterval(() => {
+            // if response from Google is not recieved yet
+            if (loopCount-- < 0) {
                 clearInterval(this.intervalId);
-                var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
+                this.emitAuthStatus(false);
                 this.windowHandle.close();
-                this.emitAuthStatusError(false, pathData);
+            } else {
+                var href: string;
+                try {
+                    href = this.windowHandle.location.href; // check if response from Google is recieved
+                } catch (e) {
+                    console.error('Error while waiting response url from Google: ', e);
+                }
+                if (href !== null) {
+                    let reg = /access_token=(.*)/;
+                    let found = href.match(reg);
+                    if (found) {
+                        console.log('Callback URL: ', href);
+                        clearInterval(this.intervalId);
+                        var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
+                        var expiresSeconds = Number(pathData.expires_in) || 1800;
+                        this.token = pathData.access_token;
+                        if (this.token) {
+                            localStorage.setItem('id_token', this.token);
+                            this.authenticated = true;
+                            this.startExpiresTimer(expiresSeconds);
+                            this.expires = new Date();
+                            this.expires = this.expires.setSeconds(this.expires.getSeconds() + expiresSeconds);
+
+                            this.windowHandle.close();
+                            this.emitAuthStatus(true);
+                            this.fetchUserInfo(path);
+                        } else {
+                            this.authenticated = false;
+                            this.emitAuthStatus(false); // so we are still going to fail the login
+                        }
+                    } else {
+                        // http://localhost:3000/auth/callback#error=access_denied
+                        if (href.indexOf(this.oAuthCallbackUrl) == 0) {
+                            clearInterval(this.intervalId);
+                            var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
+                            this.windowHandle.close();
+                            this.emitAuthStatusError(false, pathData);
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    }, this.intervalLength);
-  }
+        }, this.intervalLength);
+    }
 
-  private emitAuthStatus(success: boolean) {
+    private emitAuthStatus(success: boolean) {
         this.emitAuthStatusError(success, null);
-  }
+    }
 
-  private emitAuthStatusError(success: boolean, error: any) {
-      this.locationWatcher.next(
-          {
-              success: success,
-              authenticated: this.authenticated,
-              token: localStorage.getItem('id_token'),
-              expires: this.expires,
-              error: error
-          }
-      );
-  }
+    private emitAuthStatusError(success: boolean, error: any) {
+        this.locationWatcher.next(
+            {
+                success: success,
+                authenticated: this.authenticated,
+                token: localStorage.getItem('id_token'),
+                expires: this.expires,
+                error: error
+            }
+        );
+    }
 
-  private fetchUserInfo() {
+    private fetchUserInfo(path) {
         if (this.token != null) {
             var headers = new Headers();
             headers.append('Authorization', `Bearer ${this.token}`);
             this._http.get(this.oAuthUserUrl, { headers: headers })
                 .map(res => res.json())
                 .subscribe(
-                    info => { this.userProfile = info; 
-                              this.userProfile.image.url = this.userProfile.image.url.replace('?sz=50', '');
-                              localStorage.setItem('profile', JSON.stringify(info));
-                            },
-                    err => console.error("Failed to fetch user info:", err)
-                    );
+                info => {
+                    this.userProfile = info;
+                    this.userProfile.image.url = this.userProfile.image.url.replace('?sz=50', '');
+                    localStorage.setItem('profile', JSON.stringify(info));
+                    this._router.navigate([path]);
+                },
+                err => console.error("Failed to fetch user info:", err)
+                );
         }
     }
 
-  private parse(str) { // lifted from https://github.com/sindresorhus/query-string
+    private parse(str) { // lifted from https://github.com/sindresorhus/query-string
         if (typeof str !== 'string') {
             return {};
         }

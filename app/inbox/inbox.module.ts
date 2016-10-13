@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { InboxRoutingModule } from './inbox-routing.module';
 
+import { MaskEmailPipe } from '../pipes/mask-email.pipe';
+
 import { MailService } from '../services/mail.service';
 
 import { MailInboxResolve } from './resolves/mail-inbox-resolve.service';
@@ -20,7 +22,8 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
     declarations: [
         MailInboxComponent,
         MailDetailComponent,
-        EmailBodyDirective
+        EmailBodyDirective,
+        MaskEmailPipe
     ],
     providers: [
         MailService,

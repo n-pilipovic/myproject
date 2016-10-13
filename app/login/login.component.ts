@@ -28,8 +28,7 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        this.auth.login();
-        this.router.navigate(['/inbox']);
+        this.auth.login('/inbox');
     }
 
     isAuthenticated(): boolean {

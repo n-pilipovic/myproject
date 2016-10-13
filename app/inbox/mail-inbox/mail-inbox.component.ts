@@ -12,7 +12,7 @@ import { MailService } from '../../services/mail.service';
     moduleId: module.id,
     selector: 'mail-inbox',
     templateUrl: 'mail-inbox.template.html',
-    // styleUrls: [ 'app.styles.css' ],
+    styleUrls: ['mail-inbox.styles.css'],
     providers: [MailService]
 })
 export class MailInboxComponent implements OnInit {
