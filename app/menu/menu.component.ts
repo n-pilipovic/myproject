@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { MenuItem } from '../models/menu-item';
 import { MENUITEMS } from '../consts/menu-items';
 
+import '../styles.css';
+
 @Component({
-    moduleId: module.id,
     selector: 'menu',
-    templateUrl: 'menu.template.html',
-    styleUrls: ['menu.styles.css']
+    templateUrl: './menu.template.html',
+    styleUrls: ['./menu.styles.css']
 })
 export class MenuComponent {
     items: MenuItem[] = MENUITEMS;

@@ -9,7 +9,7 @@ import { LoginComponent } from '../login/login.component';
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/inbox',
+        redirectTo: '/login',
         pathMatch: 'full'
     },
     {

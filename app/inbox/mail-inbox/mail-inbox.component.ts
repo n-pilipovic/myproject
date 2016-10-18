@@ -2,17 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
-// import { Auth } from '../services/auth.service';
-
-import { Hero } from '../../models/hero';
 import { RecievedMail } from '../../models/recieved-mail';
 import { MailService } from '../../services/mail.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'mail-inbox',
-    templateUrl: 'mail-inbox.template.html',
-    styleUrls: ['mail-inbox.styles.css'],
+    templateUrl: './mail-inbox.template.html',
+    styleUrls: ['./mail-inbox.styles.css'],
     providers: [MailService]
 })
 export class MailInboxComponent implements OnInit {

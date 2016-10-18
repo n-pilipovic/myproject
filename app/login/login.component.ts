@@ -8,14 +8,10 @@ import { GoogleConfig } from '../consts/google-config';
 
 import { AuthService } from '../services/auth.service';
 
-import { Hero } from '../models/hero';
-// import { MailService } from '../services/mail.service';
-
 @Component({
-    moduleId: module.id,
     selector: 'app-login',
-    templateUrl: 'login.template.html',
-    styleUrls: ['login.styles.css']
+    templateUrl: './login.template.html',
+    styleUrls: ['./login.styles.css']
 })
 export class LoginComponent implements OnInit {
 

@@ -5,9 +5,8 @@ import { RecievedMail } from '../../models/recieved-mail';
 import { MailService } from '../../services/mail.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'my-mail-detail',
-    templateUrl: 'mail-detail.template.html'
+    templateUrl: './mail-detail.template.html'
 })
 export class MailDetailComponent implements OnInit {
 
