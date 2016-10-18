@@ -22,7 +22,6 @@ export class MailService {
     }
 
     getAllMails(): Observable<RecievedMail[]> {
-        // this.googleHeader.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
         return this.http.get(`${this.GMAIL_ROOT}/messages?maxResults=${this.returnMailsCount}`, { headers: this.googleHeader })
             .switchMap(res => {
                 let requests = [];

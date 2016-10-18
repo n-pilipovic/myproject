@@ -166,9 +166,9 @@ export class AuthService {
                     this.userProfile = info;
                     this.userProfile.image.url = this.userProfile.image.url.replace('?sz=50', '');
                     localStorage.setItem('profile', JSON.stringify(info));
-                    this._router.navigate([path]);
                 },
-                err => console.error("Failed to fetch user info:", err)
+                err => console.error("Failed to fetch user info:", err),
+                () => this._router.navigate([path])
                 );
         }
     }
