@@ -60,8 +60,16 @@ export class AuthService {
         return this.locationWatcher.unsubscribe();
     }
 
-    public isAuthenticated() {
-        return localStorage.getItem('id_token') ? true : false;
+    public isAuthenticated(offsetSeconds?: number) {
+        let token = JSON.parse(localStorage.getItem('id_token'));
+        offsetSeconds = offsetSeconds || 0;
+        if (token == null) {
+            return false;
+        }
+        let date = new Date(token.exp);
+        console.log('Token date: ', date.getTime());
+        console.log('Current date: ', new Date().getTime() + (offsetSeconds * 1000));
+        return (date.valueOf() > (new Date().getTime() + (offsetSeconds * 1000)));
     };
 
     public logout() {
@@ -112,7 +120,16 @@ export class AuthService {
                         var expiresSeconds = Number(pathData.expires_in) || 1800;
                         this.token = pathData.access_token;
                         if (this.token) {
-                            localStorage.setItem('id_token', this.token);
+                            let tokenDate = new Date();
+                            console.log('Token expires on: ', expiresSeconds);
+                            console.log('TokenDate started: ', tokenDate.getTime());
+                            tokenDate = new Date(tokenDate.getTime() + expiresSeconds * 1000);
+                            console.log('Final Token expires on: ', tokenDate.getTime());
+                            let googleObject = {
+                                token: this.token,
+                                exp: tokenDate
+                            }
+                            localStorage.setItem('id_token', JSON.stringify(googleObject));
                             this.authenticated = true;
                             this.startExpiresTimer(expiresSeconds);
                             this.expires = new Date();
@@ -148,7 +165,7 @@ export class AuthService {
             {
                 success: success,
                 authenticated: this.authenticated,
-                token: localStorage.getItem('id_token'),
+                token: JSON.parse(localStorage.getItem('id_token')),
                 expires: this.expires,
                 error: error
             }
@@ -166,9 +183,9 @@ export class AuthService {
                     this.userProfile = info;
                     this.userProfile.image.url = this.userProfile.image.url.replace('?sz=50', '');
                     localStorage.setItem('profile', JSON.stringify(info));
-                    this._router.navigate([path]);
                 },
-                err => console.error("Failed to fetch user info:", err)
+                err => console.error("Failed to fetch user info:", err),
+                () => this._router.navigate([path])
                 );
         }
     }

@@ -8,7 +8,7 @@ import { MailService } from '../../services/mail.service';
 @Component({
     selector: 'mail-inbox',
     templateUrl: './mail-inbox.template.html',
-    styleUrls: ['./mail-inbox.styles.css'],
+    styleUrls: ['./mail-inbox.styles.css', '../../styles.css'],
     providers: [MailService]
 })
 export class MailInboxComponent implements OnInit {

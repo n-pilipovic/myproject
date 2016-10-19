@@ -40,10 +40,6 @@ module.exports = {
                 test: /\.css$/,
                 include: helpers.root('app'),
                 loader: 'raw'
-            },
-            {
-                test: /tether\.js$/,
-                loader: "expose?Tether"
             }
         ]
     },
@@ -69,7 +65,9 @@ module.exports = {
         new webpack.ProvidePlugin({
             jQuery: 'jquery',
             $: 'jquery',
-            jquery: 'jquery'
+            jquery: 'jquery',
+            "window.Tether": 'tether',
+            "Tether": 'tether',
         })
     ],
 

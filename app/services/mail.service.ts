@@ -18,12 +18,15 @@ export class MailService {
     private mails: Array<RecievedMail> = new Array<RecievedMail>();
 
     constructor(private auth: AuthService, private http: Http, private mailHelper: MailHelper) {
-        this.googleHeader.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
+        this.googleHeader.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('id_token')).token);
     }
 
-    getAllMails(): Observable<RecievedMail[]> {
-        // this.googleHeader.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
-        return this.http.get(`${this.GMAIL_ROOT}/messages?maxResults=${this.returnMailsCount}`, { headers: this.googleHeader })
+    getAllMails(query?: string): Observable<RecievedMail[]> {
+        let url = `${this.GMAIL_ROOT}/messages?maxResults=${this.returnMailsCount}`;
+        if (query) {
+            url.concat('&q=', query);
+        }
+        return this.http.get(url, { headers: this.googleHeader })
             .switchMap(res => {
                 let requests = [];
                 this.pageToken = res.json().nextPageToken;
