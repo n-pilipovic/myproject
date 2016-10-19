@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import { GoogleConfig } from '../consts/google-config';
-
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -34,7 +32,7 @@ export class LoginComponent implements OnInit {
     logout() {
         this.auth.logout();
         if (!this.isAuthenticated()) {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/unauthorized']);
         }
     }
 }

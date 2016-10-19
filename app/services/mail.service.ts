@@ -6,6 +6,8 @@ import 'rxjs/Rx';
 import { AuthService } from './auth.service';
 import { MailHelper } from '../utils/mail.helper';
 import { RecievedMail } from '../models/recieved-mail';
+import { RecievedMailRaw } from '../models/recieved-mail-raw';
+import { OutgoingMail } from '../models/outgoing-mail';
 
 @Injectable()
 export class MailService {
@@ -33,7 +35,7 @@ export class MailService {
                 for (let message in res.json().messages) {
                     requests.push(this.http.get(`${this.GMAIL_ROOT}/messages/${res.json().messages[message].id}?format=${this.recieveMailInFormat}`, { headers: this.googleHeader }).map(res => res.json()));
                 }
-                return Observable.forkJoin(requests).map(data => {
+                return Observable.forkJoin(requests).map((data: RecievedMailRaw[]) => {
                     for (let item in data) {
                         this.mails.push(new RecievedMail(data[item].id,
                             this.mailHelper.getHeader(data[item].payload.headers, 'From'),
@@ -53,6 +55,12 @@ export class MailService {
                 this.mailHelper.getHeader(res.json().payload.headers, 'Subject'),
                 this.mailHelper.getHeader(res.json().payload.headers, 'Date'),
                 this.mailHelper.getBody(res.json().payload)));
+    }
+
+    sendMail(data: OutgoingMail): Observable<any> {
+        let rawMail = this.mailHelper.encodeEmailData(data);
+        return this.http.post(`${this.GMAIL_ROOT}/messages/send`, JSON.stringify(data), { headers: this.googleHeader })
+            .map(res => res.json());
     }
 
 }

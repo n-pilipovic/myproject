@@ -18,6 +18,8 @@ import { routing, appRoutingProviders } from './routing/app.routing';
 import { LoginComponent } from './login/login.component';
 import { MenuComponent } from './menu/menu.component';
 
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -30,7 +32,8 @@ import { MenuComponent } from './menu/menu.component';
     declarations: [
         AppComponent,
         LoginComponent,
-        MenuComponent
+        MenuComponent,
+        UnauthorizedComponent
     ],
     providers: [
         appRoutingProviders,

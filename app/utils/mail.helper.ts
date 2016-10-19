@@ -1,22 +1,23 @@
 import { RawMailParser } from '../models/raw-mail-parser';
+import { OutgoingMail } from '../models/outgoing-mail';
 
 export class MailHelper {
-    
-    constructor() {}
-    
-    public getHeader(headers:Array<any>, index:string):string {
+
+    constructor() { }
+
+    public getHeader(headers: Array<any>, index: string): string {
         var header = '';
         for (var i in headers) {
-            if(headers[i].name === index) {
+            if (headers[i].name === index) {
                 header = headers[i].value;
             }
         }
         return header;
     }
-    
-    public getBody(message:RawMailParser):string {
+
+    public getBody(message: RawMailParser): string {
         var encodedBody = '';
-        if(typeof message.parts === 'undefined') {
+        if (typeof message.parts === 'undefined') {
             encodedBody = message.body.data;
         } else {
             encodedBody = this.getHTMLPart(message.parts);
@@ -25,11 +26,11 @@ export class MailHelper {
         // escape function is used for special characters
         return atob(encodedBody);
     }
-    
-    public getHTMLPart(parts:Array<any>):string {
-        for(var i = 0; i <= parts.length; i++) {
-            if(typeof parts[i].parts === 'undefined') {
-                if(parts[i].mimeType === 'text/html') {
+
+    public getHTMLPart(parts: Array<any>): string {
+        for (var i = 0; i <= parts.length; i++) {
+            if (typeof parts[i].parts === 'undefined') {
+                if (parts[i].mimeType === 'text/html') {
                     return parts[i].body.data;
                 }
             } else {
@@ -37,5 +38,11 @@ export class MailHelper {
             }
         }
         return '';
+    }
+
+    public encodeEmailData(data: OutgoingMail): string {
+        let message = '';
+
+        return btoa(data.body).replace(/\+/g, '-').replace(/\//g, '_');
     }
 }

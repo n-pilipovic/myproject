@@ -12,7 +12,7 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
 @NgModule({
     imports: [
         RouterModule.forChild([
-            { path: 'inbox', component: MailInboxComponent, resolve: { emails: MailInboxResolve } },
+            { path: 'inbox', component: MailInboxComponent, canActivate: [AuthGuard], resolve: { emails: MailInboxResolve } },
             { path: 'email/:id', component: MailDetailComponent, canActivate: [AuthGuard] }
         ])
     ],

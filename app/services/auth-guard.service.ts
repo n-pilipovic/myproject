@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    constructor(private _authService: AuthService, private _router: Router) {}
+    constructor(private _authService: AuthService, private _router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (this._authService.isAuthenticated()) {
@@ -16,8 +16,8 @@ export class AuthGuard implements CanActivate {
         // Store the attempted URL for redirecting
         this._authService.redirectUrl = state.url;
 
-        // Navigate to the login page
-        this._router.navigate(['/login']);
+        // Navigate to the unauthorized page
+        this._router.navigate(['/unauthorized']);
         return false;
     }
 }

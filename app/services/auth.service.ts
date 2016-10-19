@@ -67,8 +67,6 @@ export class AuthService {
             return false;
         }
         let date = new Date(token.exp);
-        console.log('Token date: ', date.getTime());
-        console.log('Current date: ', new Date().getTime() + (offsetSeconds * 1000));
         return (date.valueOf() > (new Date().getTime() + (offsetSeconds * 1000)));
     };
 
@@ -121,10 +119,7 @@ export class AuthService {
                         this.token = pathData.access_token;
                         if (this.token) {
                             let tokenDate = new Date();
-                            console.log('Token expires on: ', expiresSeconds);
-                            console.log('TokenDate started: ', tokenDate.getTime());
                             tokenDate = new Date(tokenDate.getTime() + expiresSeconds * 1000);
-                            console.log('Final Token expires on: ', tokenDate.getTime());
                             let googleObject = {
                                 token: this.token,
                                 exp: tokenDate

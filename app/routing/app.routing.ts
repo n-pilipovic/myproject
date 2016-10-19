@@ -5,16 +5,17 @@ import { AuthGuard } from '../services/auth-guard.service';
 import { AuthService } from '../services/auth.service';
 
 import { LoginComponent } from '../login/login.component';
+import { UnauthorizedComponent } from '../unauthorized/unauthorized.component';
 
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/login',
+        redirectTo: '/unauthorized',
         pathMatch: 'full'
     },
     {
-        path: 'login',
-        component: LoginComponent
+        path: 'unauthorized',
+        component: UnauthorizedComponent
     }
 ];
 
