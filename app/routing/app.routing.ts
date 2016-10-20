@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 
 import { LoginComponent } from '../login/login.component';
 import { UnauthorizedComponent } from '../unauthorized/unauthorized.component';
+import { MailComposeComponent } from '../mail-compose/mail-compose.component';
 
 const appRoutes: Routes = [
     {
@@ -16,6 +17,11 @@ const appRoutes: Routes = [
     {
         path: 'unauthorized',
         component: UnauthorizedComponent
+    },
+    {
+        path: 'compose',
+        component: MailComposeComponent,
+        canActivate: [AuthGuard]
     }
 ];
 

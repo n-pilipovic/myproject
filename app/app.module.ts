@@ -17,6 +17,7 @@ import { routing, appRoutingProviders } from './routing/app.routing';
 
 import { LoginComponent } from './login/login.component';
 import { MenuComponent } from './menu/menu.component';
+import { MailComposeComponent } from './mail-compose/mail-compose.component';
 
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
@@ -33,7 +34,8 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
         AppComponent,
         LoginComponent,
         MenuComponent,
-        UnauthorizedComponent
+        UnauthorizedComponent,
+        MailComposeComponent
     ],
     providers: [
         appRoutingProviders,

@@ -16,6 +16,8 @@ export class AuthGuard implements CanActivate {
         // Store the attempted URL for redirecting
         this._authService.redirectUrl = state.url;
 
+        // Session is expired and user should be logged out
+        this._authService.logout();
         // Navigate to the unauthorized page
         this._router.navigate(['/unauthorized']);
         return false;

@@ -13,6 +13,7 @@ import { MailService } from '../../services/mail.service';
 })
 export class MailInboxComponent implements OnInit {
     title = 'My web mail';
+    dateFormat: string = 'H:mm:ss (Z), dd MMMM y';
     selectedMail: RecievedMail;
     mails: Array<Object>;
     errorMessage: any;

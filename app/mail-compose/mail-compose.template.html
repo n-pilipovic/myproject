@@ -1,0 +1,29 @@
+<div>
+	<form (ngSubmit)="sendMail()" #mailForm="ngForm">
+		<div class="form-group">
+			<label for="to">To</label>
+			<input type="text" class="form-control" id="to" required [(ngModel)]="mail.to" name="to" #to0="ngModel">
+		</div>
+		<div class="form-group">
+			<label for="cc0">Cc</label>
+			<input type="email" class="form-control" id="cc" [(ngModel)]="mail.cc" name="cc" #cc0="ngModel">
+		</div>
+		<div class="form-group">
+			<label for="bcc0">Bcc</label>
+			<input type="email" class="form-control" id="bcc" [(ngModel)]="mail.bcc" name="bcc" #bcc0="ngModel">
+		</div>
+
+		<div class="form-group">
+			<label for="subject">Subject</label>
+			<input type="text" class="form-control" id="subject" [(ngModel)]="mail.subject" name="subject">
+		</div>
+
+		<div class="form-group">
+			<label for="body">Content</label>
+			<input type="text" class="form-control" id="body" [(ngModel)]="mail.body" name="body">
+		</div>
+
+		<button type="submit" class="btn btn-default" [disabled]="!mailForm.form.valid">Send</button>
+
+	</form>
+</div>

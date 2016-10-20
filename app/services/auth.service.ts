@@ -88,7 +88,7 @@ export class AuthService {
     }
 
     public getUserInfo() {
-        return this.userProfile;
+        return JSON.parse(localStorage.getItem('profile'));
     }
 
     private getAccess(path) {

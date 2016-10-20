@@ -58,8 +58,8 @@ export class MailService {
     }
 
     sendMail(data: OutgoingMail): Observable<any> {
-        let rawMail = this.mailHelper.encodeEmailData(data);
-        return this.http.post(`${this.GMAIL_ROOT}/messages/send`, JSON.stringify(data), { headers: this.googleHeader })
+        let rawMail = this.mailHelper.encodeEmailData(data, this.auth.getUserInfo());
+        return this.http.post(`${this.GMAIL_ROOT}/messages/send`, { raw: rawMail }, { headers: this.googleHeader })
             .map(res => res.json());
     }
 
