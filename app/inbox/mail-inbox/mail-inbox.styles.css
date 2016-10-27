@@ -12,3 +12,7 @@
     border: 1px solid gainsboro;
     padding: 8 0;
 }
+
+.app-item-row:hover {
+    background-color: #F2F2F2;
+}

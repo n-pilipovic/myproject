@@ -30,7 +30,7 @@ export class MailInboxComponent implements OnInit {
 
     onSelect(mail: RecievedMail) {
         console.log('clicked on mail');
-        this.router.navigate(['/email', mail.id]);
+        this.router.navigate(['/inbox', mail.id]);
     }
 
     getMails() {
