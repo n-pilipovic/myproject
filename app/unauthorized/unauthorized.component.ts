@@ -14,6 +14,8 @@ export class UnauthorizedComponent implements OnInit {
     ngOnInit() {
         if (this.isAuthenticated()) {
             this.router.navigate(['/inbox']);
+        } else {
+            this.auth.logout();
         }
     }
 
