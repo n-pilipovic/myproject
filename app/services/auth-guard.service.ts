@@ -18,8 +18,6 @@ export class AuthGuard implements CanActivate {
 
         // Session is expired and user should be logged out
         this._authService.logout();
-        // Navigate to the unauthorized page
-        // this._router.navigate(['/unauthorized']);
         return false;
     }
 }

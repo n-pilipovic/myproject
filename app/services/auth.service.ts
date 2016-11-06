@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
 import 'rxjs/Rx';
 
 import { GoogleConfig } from '../consts/google-config';
@@ -14,8 +13,6 @@ export class AuthService {
     private oAuthCallbackUrl: string;
     private oAuthTokenUrl: string;
     private oAuthUserUrl: string;
-    private oAuthUserNameField: string;
-    private locationWatcher = new Subject();
     private authenticated: boolean = false;
     // used for window session
     private windowHandle: any = null;
@@ -26,7 +23,6 @@ export class AuthService {
     // used for token
     private token: string;
     private expires: any = 0;
-    private expiresTimerId: any = null;
 
     //Store profile object in auth class
     public picSize: string = '?sz=36';
@@ -52,14 +48,6 @@ export class AuthService {
         this.getAccess(path);
     };
 
-    public subscribe(onNext: (value: any) => void, onError?: (exception: any) => void, onComplete?: () => void) {
-        return this.locationWatcher.subscribe(onNext, onError, onComplete);
-    }
-
-    public unsubscribe() {
-        return this.locationWatcher.unsubscribe();
-    }
-
     public isAuthenticated(offsetSeconds?: number) {
         let token = JSON.parse(localStorage.getItem('id_token'));
         offsetSeconds = offsetSeconds || 0;
@@ -76,11 +64,10 @@ export class AuthService {
         localStorage.removeItem('profile');
         this.authenticated = false;
         this.userProfile = undefined;
-        this.expiresTimerId = null;
         this.expires = 0;
         this.token = null;
-        this.emitAuthStatus(true);
         console.log('Session has been cleared');
+        this._router.navigate(['/']);
     };
 
     public getSession() {
@@ -98,8 +85,6 @@ export class AuthService {
         this.intervalId = setInterval(() => {
             // if response from Google is not recieved yet
             if (loopCount-- < 0) {
-                clearInterval(this.intervalId);
-                this.emitAuthStatus(false);
                 this.windowHandle.close();
             } else {
                 var href: string;
@@ -113,7 +98,6 @@ export class AuthService {
                     let found = href.match(reg);
                     if (found) {
                         console.log('Callback URL: ', href);
-                        clearInterval(this.intervalId);
                         var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
                         var expiresSeconds = Number(pathData.expires_in) || 1800;
                         this.token = pathData.access_token;
@@ -126,45 +110,24 @@ export class AuthService {
                             }
                             localStorage.setItem('id_token', JSON.stringify(googleObject));
                             this.authenticated = true;
-                            this.startExpiresTimer(expiresSeconds);
                             this.expires = new Date();
                             this.expires = this.expires.setSeconds(this.expires.getSeconds() + expiresSeconds);
 
                             this.windowHandle.close();
-                            this.emitAuthStatus(true);
                             this.fetchUserInfo(path);
                         } else {
                             this.authenticated = false;
-                            this.emitAuthStatus(false); // so we are still going to fail the login
                         }
                     } else {
                         // http://localhost:3000/auth/callback#error=access_denied
                         if (href.indexOf(this.oAuthCallbackUrl) == 0) {
-                            clearInterval(this.intervalId);
                             var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
                             this.windowHandle.close();
-                            this.emitAuthStatusError(false, pathData);
                         }
                     }
                 }
             }
         }, this.intervalLength);
-    }
-
-    private emitAuthStatus(success: boolean) {
-        this.emitAuthStatusError(success, null);
-    }
-
-    private emitAuthStatusError(success: boolean, error: any) {
-        this.locationWatcher.next(
-            {
-                success: success,
-                authenticated: this.authenticated,
-                token: JSON.parse(localStorage.getItem('id_token')),
-                expires: this.expires,
-                error: error
-            }
-        );
     }
 
     private fetchUserInfo(path) {
@@ -215,16 +178,5 @@ export class AuthService {
 
             return ret;
         }, {});
-    }
-
-    private startExpiresTimer(seconds: number) {
-        if (this.expiresTimerId != null) {
-            clearTimeout(this.expiresTimerId);
-        }
-        this.expiresTimerId = setTimeout(() => {
-            console.log('Session has expired');
-            this.logout();
-        }, seconds * 1000); // seconds * 1000
-        console.log('Token expiration timer set for', seconds, "seconds");
     }
 }
