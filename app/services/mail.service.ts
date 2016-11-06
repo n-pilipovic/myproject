@@ -17,7 +17,6 @@ export class MailService {
     private returnMailsCount: number = 50;
     private pageToken: string = '';
     private googleHeader: Headers = new Headers();
-    private mails: Array<RecievedMail> = new Array<RecievedMail>();
 
     constructor(private auth: AuthService, private http: Http, private mailHelper: MailHelper) {
         this.googleHeader.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('id_token')).token);
@@ -25,6 +24,7 @@ export class MailService {
 
     getAllMails(query?: string): Observable<RecievedMail[]> {
         let url = `${this.GMAIL_ROOT}/messages?maxResults=${this.returnMailsCount}`;
+        let mails: Array<RecievedMail> = new Array<RecievedMail>();
         if (query) {
             url.concat('&q=', query);
         }
@@ -37,13 +37,13 @@ export class MailService {
                 }
                 return Observable.forkJoin(requests).map((data: RecievedMailRaw[]) => {
                     for (let item in data) {
-                        this.mails.push(new RecievedMail(data[item].id,
+                        mails.push(new RecievedMail(data[item].id,
                             this.mailHelper.getHeader(data[item].payload.headers, 'From'),
                             this.mailHelper.getHeader(data[item].payload.headers, 'Subject'),
                             this.mailHelper.getHeader(data[item].payload.headers, 'Date'),
                             this.mailHelper.getBody(data[item].payload)));
                     }
-                    return this.mails;
+                    return mails;
                 });
             });
     }

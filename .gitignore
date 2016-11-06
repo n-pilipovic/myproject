@@ -1,3 +1,7 @@
+# VSC related
+.vscode/*
+
+# Project related
 node_modules/*
 typings/*
 app/**/*.js

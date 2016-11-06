@@ -6,7 +6,8 @@ import { MailService } from '../../services/mail.service';
 
 @Component({
     selector: 'my-mail-detail',
-    templateUrl: './mail-detail.template.html'
+    templateUrl: './mail-detail.template.html',
+    styleUrls: ['./mail-detail.styles.css']
 })
 export class MailDetailComponent implements OnInit {
 

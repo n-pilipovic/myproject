@@ -33,7 +33,4 @@ export class MailInboxComponent implements OnInit {
         this.router.navigate(['/inbox', mail.id]);
     }
 
-    getMails() {
-        this.mailService.getAllMails().subscribe(data => this.mails = data);
-    }
 }

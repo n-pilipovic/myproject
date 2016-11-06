@@ -16,3 +16,7 @@ body {
 ul {
   list-style: none;
 }
+
+.header-container {
+  margin-bottom: 30px;
+}

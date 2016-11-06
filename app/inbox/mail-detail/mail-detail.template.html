@@ -1,9 +1,9 @@
-<div *ngIf="mail">
+<div *ngIf="mail" class="email-detail">
 	<div><label>id: </label>{{mail.id}}</div>
 	<div><label>From: </label>{{mail.from}}</div>
 	<div><label>Subject: </label>{{mail.subject}}</div>
 	<div><label>Date: </label>{{mail.date}}</div>
 	<div><label>Body: </label>
-		<div [emailBody]="mail.body"></div>
+		<div [emailBody]="mail.body" class="email-body"></div>
 	</div>
 </div>

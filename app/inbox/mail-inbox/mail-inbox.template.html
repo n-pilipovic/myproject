@@ -1,5 +1,3 @@
-<!--<button (click)="getMails()">Get Mails</button>-->
-
 <ul class="emails">
 	<li *ngFor="let mail of mails" class="col-sm-12 app-item-row" (click)="onSelect(mail)">
 		<span class="col-sm-3">{{ mail.from | maskEmail }}</span>
