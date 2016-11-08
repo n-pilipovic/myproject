@@ -85,6 +85,7 @@ export class AuthService {
         this.intervalId = setInterval(() => {
             // if response from Google is not recieved yet
             if (loopCount-- < 0) {
+                clearInterval(this.intervalId);
                 this.windowHandle.close();
             } else {
                 var href: string;
@@ -98,6 +99,7 @@ export class AuthService {
                     let found = href.match(reg);
                     if (found) {
                         console.log('Callback URL: ', href);
+                        clearInterval(this.intervalId);
                         var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
                         var expiresSeconds = Number(pathData.expires_in) || 1800;
                         this.token = pathData.access_token;
@@ -121,6 +123,7 @@ export class AuthService {
                     } else {
                         // http://localhost:3000/auth/callback#error=access_denied
                         if (href.indexOf(this.oAuthCallbackUrl) == 0) {
+                            clearInterval(this.intervalId);
                             var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
                             this.windowHandle.close();
                         }
