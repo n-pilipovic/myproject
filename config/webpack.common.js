@@ -67,7 +67,7 @@ module.exports = {
 
     output: {
         path: helpers.root('dist'),
-        publicPath: 'https://localhost:4040/',
+        publicPath: 'https://localhost:4040/myproject/dist/',
         filename: '[name].js',
         chunkFilename: '[id].chunk.js'
     },
