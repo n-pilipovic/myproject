@@ -4,6 +4,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 
+const GMAIL_API_CALLBACK_URL = process.env.GMAIL_API_CALLBACK_URL = 'https://n-pilipovic.github.io/myproject/dist/app/auth/callback';
+
 module.exports = {
     entry: {
         'polyfills': './app/polyfills.ts',
@@ -89,6 +91,13 @@ module.exports = {
             jquery: 'jquery',
             "window.Tether": 'tether',
             "Tether": 'tether'
+        }),
+
+        new webpack.DefinePlugin({
+            'GMAIL_API_CALLBACK_URL': JSON.stringify(GMAIL_API_CALLBACK_URL),
+            'process.env': {
+                'GMAIL_API_CALLBACK_URL': JSON.stringify(GMAIL_API_CALLBACK_URL)
+            }
         })
     ],
 

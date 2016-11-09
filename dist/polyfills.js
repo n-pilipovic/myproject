@@ -98,19 +98,18 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
+	"use strict";
 	__webpack_require__(406);
 	__webpack_require__(651);
 	__webpack_require__(663);
-	if (process.env.ENV === 'production') {
+	if (({"GMAIL_API_CALLBACK_URL":"https://n-pilipovic.github.io/myproject/dist/app/auth/callback"}).ENV === 'production') {
 	}
 	else {
 	    // Development
 	    Error['stackTraceLimit'] = Infinity;
 	    __webpack_require__(664);
 	}
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(317)))
+
 
 /***/ },
 /* 1 */,
