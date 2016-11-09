@@ -11,7 +11,8 @@ module.exports = {
         'app': './app/main.ts',
     },
 
-    devtool: 'cheap-module-eval-source-map',
+    // devtool: 'cheap-module-eval-source-map',
+    devtool: 'source-map',
 
     resolve: {
         extensions: ['', '.js', '.ts']
@@ -28,8 +29,28 @@ module.exports = {
                 loader: 'html'
             },
             {
-                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+                test: /\.(png|jpe?g|gif|ico)$/,
                 loader: 'file?name=assets/[name].[hash].[ext]'
+            },
+            {
+                test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=application/font-woff"
+            },
+            {
+                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=application/font-woff"
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=application/octet-stream"
+            },
+            {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "file"
+            },
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: "url?limit=10000&mimetype=image/svg+xml"
             },
             {
                 test: /\.css$/,
@@ -46,7 +67,7 @@ module.exports = {
 
     output: {
         path: helpers.root('dist'),
-        publicPath: 'https://localhost:4040/app/',
+        publicPath: 'https://localhost:4040/',
         filename: '[name].js',
         chunkFilename: '[id].chunk.js'
     },

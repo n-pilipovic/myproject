@@ -13,3 +13,9 @@
   -moz-hyphens: auto;
   hyphens: auto;
 }
+
+.btn-reply {
+    position: absolute;
+    top: 0;
+    right: 10px;
+}

@@ -14,11 +14,7 @@ export class MailComposeComponent {
     mail: OutgoingMail;
 
     constructor(private mailService: MailService) {
-
         this.mail = new OutgoingMail('', '', '', '', '');
-        // this.mail.to.push('');
-        // this.mail.cc.push('');
-        // this.mail.bcc.push('');
     }
 
     sendMail() {

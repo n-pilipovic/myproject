@@ -1,4 +1,7 @@
 <div *ngIf="mail" class="email-detail">
+	<button type="button" class="btn btn-sm btn-primary btn-reply" placement="bottom" ngbTooltip="Reply">
+		<i class="fa fa-reply fa-2x" aria-hidden="true"></i>
+	</button>
 	<div><label>id: </label>{{mail.id}}</div>
 	<div><label>From: </label>{{mail.from}}</div>
 	<div><label>Subject: </label>{{mail.subject}}</div>

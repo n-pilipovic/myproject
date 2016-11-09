@@ -78,7 +78,7 @@ export class AuthService {
         return JSON.parse(localStorage.getItem('profile'));
     }
 
-    private getAccess(path) {
+    private getAccess(path: string) {
         let loopCount = this.loopCount;
         this.windowHandle = this._window.createWindow(this.oAuthTokenUrl, 'OAuth2 Login');
 
@@ -133,7 +133,7 @@ export class AuthService {
         }, this.intervalLength);
     }
 
-    private fetchUserInfo(path) {
+    private fetchUserInfo(path: string) {
         if (this.token != null) {
             var headers = new Headers();
             headers.append('Authorization', `Bearer ${this.token}`);

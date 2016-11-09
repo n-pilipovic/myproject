@@ -26,7 +26,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
         BrowserModule,
         FormsModule,
         HttpModule,
-        NgbModule,
+        NgbModule.forRoot(),
         InboxModule,
         routing
     ],
