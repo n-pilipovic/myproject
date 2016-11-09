@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "webpack-dev-server --inline --progress --https --hot --port 4040 --content-base app/",
-    "build": "rimraf dist && webpack --config config/webpack.common.js --progress --watch --profile --bail"
+    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --watch --profile --bail"
   },
   "dependencies": {
     "@angular/common": "~2.0.2",
