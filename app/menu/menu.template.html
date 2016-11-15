@@ -1,7 +1,16 @@
-<div>
-	<ul>
-		<li *ngFor="let menuItem of items">
-			<a routerLink="/{{menuItem.path}}" class="btn btn-primary">{{menuItem.name}}</a>
-		</li>
-	</ul>
+<div class="bootstrap-vertical-nav">
+
+	<nav class="navbar navbar-light bg-faded">
+		<button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2">
+                        &#9776;
+                    </button>
+		<div class="collapse navbar-toggleable-sm" id="exCollapsingNavbar2">
+			<ul class="nav navbar-nav">
+				<li *ngFor="let menuItem of items" class="nav-item active">
+					<a routerLink="/{{menuItem.path}}" class="nav-link">{{menuItem.name}} <span class="sr-only">(current)</span></a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
 </div>
