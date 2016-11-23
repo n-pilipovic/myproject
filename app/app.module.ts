@@ -3,7 +3,8 @@ import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ButtonModule, MenuModule } from 'primeng/primeng';
 
 import { AppComponent } from './app.component';
 import { InboxModule } from './inbox/inbox.module';
@@ -26,7 +27,9 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
         BrowserModule,
         FormsModule,
         HttpModule,
-        NgbModule.forRoot(),
+        ButtonModule,
+        MenuModule,
+        // NgbModule.forRoot(),
         InboxModule,
         routing
     ],

@@ -1,4 +1,4 @@
-<div class="dropdown dropdown-profile" *ngIf="isAuthenticated() && auth.userProfile">
+<!--<div class="dropdown dropdown-profile" *ngIf="isAuthenticated() && auth.userProfile">
 	<button class="btn btn-secondary dropdown-toggle btn-profile btn-margin" type="button" id="dropdownMenuButton" data-toggle="dropdown"
 		aria-haspopup="true" aria-expanded="false">
         <img [src]="auth.userProfile.image.url + auth.picSize" alt="" class="profile-img">
@@ -9,4 +9,14 @@
 		<button class="btn btn-primary btn-margin pull-xs-right" (click)="logout()" *ngIf="isAuthenticated()">Log Out</button>
 	</div>
 </div>
-<button class="btn btn-primary btn-margin" (click)="login()" *ngIf="!isAuthenticated()">Log In</button>
+<button pButton type="text" label="Log In" (click)="login()" *ngIf="!isAuthenticated()"></button>-->
+
+
+<!-- UNFINISHED -->
+
+<button pButton type="text" label="Log In" (click)="login()" *ngIf="!isAuthenticated()"></button>
+
+<p-menu #menu popup="popup" [model]="items"></p-menu>
+<button type="button" pButton label="Account" (click)="menu.toggle($event)" *ngIf="isAuthenticated() && auth.userProfile">
+	<img [src]="auth.userProfile.image.url + auth.picSize" alt="" class="profile-img">
+</button>

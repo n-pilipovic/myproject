@@ -1,4 +1,4 @@
-require('font-awesome/css/font-awesome.css');
+// require('font-awesome/css/font-awesome.css');
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 

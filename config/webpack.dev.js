@@ -85,13 +85,13 @@ module.exports = {
 
         new ExtractTextPlugin('[name].css'),
 
-        new webpack.ProvidePlugin({
-            jQuery: 'jquery',
-            $: 'jquery',
-            jquery: 'jquery',
-            "window.Tether": 'tether',
-            "Tether": 'tether'
-        }),
+        // new webpack.ProvidePlugin({
+        //     jQuery: 'jquery',
+        //     $: 'jquery',
+        //     jquery: 'jquery',
+        //     "window.Tether": 'tether',
+        //     "Tether": 'tether'
+        // }),
 
         new webpack.DefinePlugin({
             'GMAIL_API_CALLBACK_URL': JSON.stringify(GMAIL_API_CALLBACK_URL),

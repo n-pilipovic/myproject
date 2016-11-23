@@ -1,7 +1,3 @@
-/*ul {
-    padding: 0;
-}*/
-
 /* Creates a vertical nav starting at 768px (sm) */
 @media (min-width: 768px) {
    .bootstrap-vertical-nav .navbar .navbar-collapse {
