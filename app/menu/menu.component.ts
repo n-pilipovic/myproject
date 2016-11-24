@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { MenuItem } from 'primeng/primeng';
 
-import { MenuItem } from '../models/menu-item';
 import { MENUITEMS } from '../consts/menu-items';
 
 @Component({

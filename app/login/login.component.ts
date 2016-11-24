@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 
@@ -10,9 +10,12 @@ import { AuthService } from '../services/auth.service';
 @Component({
     selector: 'app-login',
     templateUrl: './login.template.html',
-    styleUrls: ['./login.styles.css']
+    styleUrls: ['./login.styles.css'],
+    encapsulation: ViewEncapsulation.None   // Important to add in order to override PrimeNG classes
 })
 export class LoginComponent implements OnInit {
+
+    private profile: MenuItem[];
 
     constructor(public auth: AuthService, private router: Router) { }
 
@@ -35,5 +38,14 @@ export class LoginComponent implements OnInit {
         if (!this.isAuthenticated()) {
             this.router.navigate(['/unauthorized']);
         }
+    }
+
+    setProfile(): void {
+        let name = 'Name: '.concat(this.auth.getUserInfo().displayName);
+        let email = 'Email: '.concat(this.auth.getUserInfo().emails[0].value);
+        this.profile = [
+            { label: name },
+            { label: email }
+        ];
     }
 }

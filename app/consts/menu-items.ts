@@ -1,7 +1,7 @@
-import { MenuItem } from '../models/menu-item';
+import { MenuItem } from 'primeng/primeng';
 
 export const MENUITEMS: MenuItem[] = [
-    { name: "Compose", path: 'compose'},
-    { name: "Inbox", path: 'inbox'},
-    { name: "Sent", path: 'sent'}
- ]
+    { label: "Compose", routerLink: ['/compose'] },
+    { label: "Inbox", routerLink: ['/inbox'] },
+    { label: "Sent", routerLink: ['/sent'] }
+]
