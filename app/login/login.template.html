@@ -1,6 +1,11 @@
 <!-- Visible when user is not logged in -->
-<button pButton type="text" label="Log In" (click)="login()" *ngIf="!isAuthenticated()"></button>
+<div class="ui-g-10">
+    <button pButton type="text" label="Log In" (click)="login()" *ngIf="!isAuthenticated()"></button>
 
-<!-- Visible when user is logged in -->
-<button type="button" pButton label="Account" (click)="menu.toggle($event); setProfile()" *ngIf="isAuthenticated() && auth.userProfile"></button>
-<p-menu #menu popup="popup" [model]="profile" class="dropdown-profile"></p-menu>
+    <!-- Visible when user is logged in -->
+    <button type="button" pButton label="Account" (click)="menu.toggle($event); setProfile()" *ngIf="isAuthenticated() && auth.userProfile"></button>
+    <p-menu #menu popup="popup" [model]="profile"></p-menu>
+</div>
+<div class="ui-g-2">
+    <button type="button" pButton label="Log Out" class="ui-pull-right" (click)="logout()" *ngIf="isAuthenticated()"></button>
+</div>

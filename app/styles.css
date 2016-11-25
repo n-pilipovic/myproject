@@ -20,3 +20,7 @@ ul {
 .header-container {
   margin-bottom: 30px;
 }
+
+.ui-pull-right {
+  float: right;
+}

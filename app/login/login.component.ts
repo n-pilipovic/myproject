@@ -10,7 +10,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
     selector: 'app-login',
     templateUrl: './login.template.html',
-    styleUrls: ['./login.styles.css'],
+    styleUrls: ['./login.styles.css', '../styles.css'],
     encapsulation: ViewEncapsulation.None   // Important to add in order to override PrimeNG classes
 })
 export class LoginComponent implements OnInit {

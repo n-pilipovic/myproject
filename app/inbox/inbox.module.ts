@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/primeng';
 
 import { InboxRoutingModule } from './inbox-routing.module';
 
 import { MaskEmailPipe } from '../pipes/mask-email.pipe';
+import { TodayPipe } from '../pipes/today.pipe';
 
 import { MailService } from '../services/mail.service';
 
@@ -17,13 +19,15 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
 @NgModule({
     imports: [
         CommonModule,
+        ButtonModule,
         InboxRoutingModule
     ],
     declarations: [
         MailInboxComponent,
         MailDetailComponent,
         EmailBodyDirective,
-        MaskEmailPipe
+        MaskEmailPipe,
+        TodayPipe
     ],
     providers: [
         MailService,

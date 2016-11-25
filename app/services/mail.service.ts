@@ -15,15 +15,16 @@ export class MailService {
     private GMAIL_ROOT: string = 'https://www.googleapis.com/gmail/v1/users/me';
     private recieveMailInFormat: string = 'full';
     private returnMailsCount: number = 50;
-    private pageToken: string = '';
     private googleHeader: Headers = new Headers();
+    private pageToken: string;
 
     constructor(private auth: AuthService, private http: Http, private mailHelper: MailHelper) {
         this.googleHeader.append('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('id_token')).token);
     }
 
-    getAllMails(query?: string): Observable<RecievedMail[]> {
+    getAllMails(query?: string, pageToken?: string): Observable<RecievedMail[]> {
         let url = `${this.GMAIL_ROOT}/messages?maxResults=${this.returnMailsCount}`;
+        url = (pageToken) ? `${this.GMAIL_ROOT}/messages?maxResults=${this.returnMailsCount}&pageToken=${pageToken}` : `${this.GMAIL_ROOT}/messages?maxResults=${this.returnMailsCount}`;
         let mails: Array<RecievedMail> = new Array<RecievedMail>();
         if (query) {
             url.concat('&q=', query);
@@ -31,7 +32,7 @@ export class MailService {
         return this.http.get(url, { headers: this.googleHeader })
             .switchMap(res => {
                 let requests = [];
-                this.pageToken = res.json().nextPageToken;
+                this.PageToken = res.json().nextPageToken;
                 for (let message in res.json().messages) {
                     requests.push(this.http.get(`${this.GMAIL_ROOT}/messages/${res.json().messages[message].id}?format=${this.recieveMailInFormat}`, { headers: this.googleHeader }).map(res => res.json()));
                 }
@@ -61,6 +62,14 @@ export class MailService {
         let rawMail = this.mailHelper.encodeEmailData(data, this.auth.getUserInfo());
         return this.http.post(`${this.GMAIL_ROOT}/messages/send`, { raw: rawMail }, { headers: this.googleHeader })
             .map(res => res.json());
+    }
+
+    set PageToken(pageToken: string) {
+        this.pageToken = pageToken;
+    }
+
+    get PageToken(): string {
+        return this.pageToken;
     }
 
 }
