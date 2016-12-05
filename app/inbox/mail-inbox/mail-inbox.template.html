@@ -1,5 +1,4 @@
-<button type="button" pButton label="Get net page" class="ui-pull-right" (click)="getNextPage()"></button>
-<ul class="emails">
+<ul class="emails" infinite-scroll (scrolled)="onScroll()" [infiniteScrollDistance]="2" [scrollWindow]="false">
 	<li *ngFor="let mail of mails" class="ui-g-12 app-item-row" (click)="onSelect(mail)">
 		<span class="ui-g-3">{{ mail.from | maskEmail }}</span>
 		<span class="ui-g-7 app-text-wrap">{{ mail.subject }}</span>

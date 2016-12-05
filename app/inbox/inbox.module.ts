@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/primeng';
+import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { InboxRoutingModule } from './inbox-routing.module';
 
@@ -20,6 +21,7 @@ import { MailDetailComponent } from './mail-detail/mail-detail.component';
     imports: [
         CommonModule,
         ButtonModule,
+        InfiniteScrollModule,
         InboxRoutingModule
     ],
     declarations: [

@@ -25,16 +25,22 @@ export class MailInboxComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.route.data.forEach((data: { emails: RecievedMail[] }) => {
-            this.mails = data.emails;
-        })
+        this.mailService.getAllMails('', '').subscribe((data: RecievedMail[]) => {
+            // Emails should be sorted in descending order by Date and Time of arrival
+            // data = this.utilHelper.sortByDate(data);
+            this.mails = data;
+        });
+        // this.route.data.forEach((data: { data: any }) => {
+        //     this.mails = data.data.emails;
+        //     // this.mailService.PageToken = data.data.nextPageToken;
+        //     this.nextPageToken = data.data.nextPageToken;
+        //     this.previousPageToken = data.data.previousPageToken;
+        // })
     }
 
-    getNextPage() {
+    onScroll() {
         let token = this.mailService.PageToken;
-        this.mailService.getAllMails('', token).map((data: RecievedMail[]) => {
-            // Emails should be sorted in descending order by Date and Time of arrival
-            data = this.utilHelper.sortByDate(data);
+        this.mailService.getAllMails('', this.mailService.PageToken).subscribe((data: RecievedMail[]) => {
             this.mails = data;
         });
     }

@@ -16,7 +16,7 @@ export class UtilHelper {
      * 
      * @memberOf UtilHelper
      */
-    public sortByDate(data: any[], desc?: boolean): any {
+    public sortByDate(data: any[], desc?: boolean) {
         data.sort((leftSide, rightSide): number => {
             if (desc) {
                 return new Date(leftSide.date).getTime() - new Date(rightSide.date).getTime();
@@ -24,6 +24,6 @@ export class UtilHelper {
                 return new Date(rightSide.date).getTime() - new Date(leftSide.date).getTime();
             }
         });
-        return data;
+        // return data;
     }
 }

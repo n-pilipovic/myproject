@@ -13,9 +13,13 @@ export class MailInboxResolve implements Resolve<RecievedMail[]> {
     resolve(): Observable<any> | boolean {
         return this.mailService.getAllMails().map((data: RecievedMail[]) => {
             if (data) {
+                let emails;
                 // Emails should be sorted in descending order by Date and Time of arrival
-                data = this.utilHelper.sortByDate(data);
-                return data;
+                emails = this.utilHelper.sortByDate(data);
+                let retData = {
+                    emails: emails
+                };
+                return retData;
             } else { // id not found
                 this.router.navigate(['/']);
                 return false;
