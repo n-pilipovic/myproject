@@ -1,25 +1,35 @@
 <div>
-	<form (ngSubmit)="sendMail()" #mailForm="ngForm">
+	<form (ngSubmit)="sendMail()" [formGroup]="composeform" novalidate>
 		<div class="form-group">
-			<input type="text" class="form-control" id="to" required [(ngModel)]="mail.to" name="to" #to0="ngModel" placeholder="To">
+			<p-chips class="form-control" id="to" name="to" placeholder="To" formControlName="to"></p-chips>
+			<div *ngIf="composeform.controls['to'].hasError('pattern') && composeform.controls['to'].touched">
+				Email can be sent only to valid email addresses.
+			</div>
+			<div *ngIf="composeform.controls['to'].hasError('required') && composeform.controls['to'].touched">
+				Please, type in email address.
+			</div>
 		</div>
 		<div class="form-group">
-			<input type="email" class="form-control" id="cc" [(ngModel)]="mail.cc" name="cc" #cc0="ngModel" placeholder="Cc">
+			<p-chips class="form-control" id="cc" name="cc" placeholder="Cc" formControlName="cc"></p-chips>
 		</div>
 		<div class="form-group">
-			<input type="email" class="form-control" id="bcc" [(ngModel)]="mail.bcc" name="bcc" #bcc0="ngModel" placeholder="Bcc">
+			<p-chips class="form-control" id="bcc" name="bcc" placeholder="Bcc" formControlName="bcc"></p-chips>
 		</div>
 
 		<div class="form-group">
-			<input type="text" class="form-control" id="subject" [(ngModel)]="mail.subject" name="subject" placeholder="Subject">
+			<input type="text" class="form-control" id="subject" formControlName="subject" name="subject" placeholder="Subject">
 		</div>
 
 		<div class="form-group">
-			<textarea type="text" class="form-control compose-body-area" id="body" [(ngModel)]="mail.body" name="body">
+			<textarea type="text" class="form-control compose-body-area" id="body" name="body" formControlName="body">
 			</textarea>
 		</div>
 
-		<button type="submit" class="btn btn-default" [disabled]="!mailForm.form.valid">Send</button>
+		<div *ngIf="info.show">
+			{{ info.msg }}
+		</div>
+
+		<button type="submit" class="btn btn-default" [disabled]="!composeform.valid">Send</button>
 
 	</form>
 </div>

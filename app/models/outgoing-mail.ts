@@ -1,11 +1,11 @@
 export class OutgoingMail {
-    to: string;
-    cc: string;
-    bcc: string;
+    to: Array<string>;
+    cc: Array<string>;
+    bcc: Array<string>;
     subject: string;
     body: string;
 
-    constructor(to: string, cc: string, bcc: string, subject: string, body: string) {
+    constructor(to: Array<string>, cc: Array<string>, bcc: Array<string>, subject: string, body: string) {
         this.to = to;
         this.cc = cc;
         this.bcc = bcc;

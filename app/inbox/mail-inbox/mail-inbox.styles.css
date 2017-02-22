@@ -1,7 +1,7 @@
 .emails {
     padding: 0;
     font-size: small;
-    height: 20rem;
+    /*height: 20rem;*/
     overflow-y: scroll;
 }
 

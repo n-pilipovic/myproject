@@ -1,12 +1,13 @@
 <div *ngIf="mail" class="email-detail">
-	<button type="button" class="btn btn-sm btn-primary btn-reply" placement="bottom" ngbTooltip="Reply">
-		<i class="fa fa-reply fa-2x" aria-hidden="true"></i>
-	</button>
-	<div><label>id: </label>{{mail.id}}</div>
 	<div><label>From: </label>{{mail.from}}</div>
 	<div><label>Subject: </label>{{mail.subject}}</div>
 	<div><label>Date: </label>{{mail.date}}</div>
-	<div><label>Body: </label>
+	<div>
+		<button type="button" class="btn btn-xs btn-primary" placement="bottom" ngbTooltip="Reply" (click)="reply()">
+			<i class="fa fa-reply fa-x" aria-hidden="true"></i>
+		</button>
+	</div>
+	<div>
 		<div [emailBody]="mail.body" class="email-body"></div>
 	</div>
 </div>

@@ -54,25 +54,25 @@ export class MailHelper {
         let mime = 'MIME-Version: 1.0';
         let content = mail.body;
         let retVal = '';
-        // let i = 0;
-        // while (i < mail.to.length) {
-        //     retVal = retVal.concat('to: ', mail.to[i]).concat(rowDelimiter);
-        //     i++;
-        // }
-        // i = 0;
-        // while (i < mail.cc.length) {
-        //     retVal = retVal.concat('cc: ', mail.cc[i]).concat(rowDelimiter);
-        //     i++;
-        // }
-        // i = 0;
-        // while (i < mail.bcc.length) {
-        //     retVal = retVal.concat('bcc: ', mail.bcc[i]).concat(rowDelimiter);
-        //     i++;
-        // }
+        let i = 0;
+        while (i < mail.to.length) {
+            retVal = retVal.concat('to: ', mail.to[i]).concat(rowDelimiter);
+            i++;
+        }
+        i = 0;
+        while (i < mail.cc.length) {
+            retVal = retVal.concat('cc: ', mail.cc[i]).concat(rowDelimiter);
+            i++;
+        }
+        i = 0;
+        while (i < mail.bcc.length) {
+            retVal = retVal.concat('bcc: ', mail.bcc[i]).concat(rowDelimiter);
+            i++;
+        }
 
-        retVal = retVal.concat('To: ', mail.to).concat(rowDelimiter);
-        retVal = retVal.concat('Cc: ', mail.cc).concat(rowDelimiter);
-        retVal = retVal.concat('Bcc: ', mail.bcc).concat(rowDelimiter);
+        // retVal = retVal.concat('To: ', mail.to).concat(rowDelimiter);
+        // retVal = retVal.concat('Cc: ', mail.cc).concat(rowDelimiter);
+        // retVal = retVal.concat('Bcc: ', mail.bcc).concat(rowDelimiter);
 
         retVal = retVal.concat('From: ', user.emails[0].value).concat(rowDelimiter);
         retVal = retVal.concat('Subject: ', mail.subject).concat(rowDelimiter);

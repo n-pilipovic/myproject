@@ -7,6 +7,7 @@ import { AuthService } from '../services/auth.service';
 import { LoginComponent } from '../login/login.component';
 import { UnauthorizedComponent } from '../unauthorized/unauthorized.component';
 import { MailComposeComponent } from '../mail-compose/mail-compose.component';
+import { MailReplyResolve } from '../mail-compose/mail-reply/mail-reply-resolve.service';
 
 const appRoutes: Routes = [
     {
@@ -22,6 +23,12 @@ const appRoutes: Routes = [
         path: 'compose',
         component: MailComposeComponent,
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'reply',
+        component: MailComposeComponent,
+        canActivate: [AuthGuard],
+        resolve: MailReplyResolve
     }
 ];
 

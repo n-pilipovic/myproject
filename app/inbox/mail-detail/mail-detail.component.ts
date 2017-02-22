@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { RecievedMail } from '../../models/recieved-mail';
 import { MailService } from '../../services/mail.service';
@@ -13,7 +13,7 @@ export class MailDetailComponent implements OnInit {
 
     mail: RecievedMail;
 
-    constructor(private route: ActivatedRoute, private mailService: MailService) { }
+    constructor(private route: ActivatedRoute, private router: Router, private mailService: MailService) { }
 
     ngOnInit() {
         console.log('entered on maildetail');
@@ -25,5 +25,9 @@ export class MailDetailComponent implements OnInit {
                     this.mail = mail;
                 });
         });
+    }
+
+    reply() {
+        this.router.navigate(['/reply', this.mail.id]);
     }
 }

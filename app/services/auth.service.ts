@@ -121,7 +121,7 @@ export class AuthService {
                             this.authenticated = false;
                         }
                     } else {
-                        // http://localhost:3000/auth/callback#error=access_denied
+                        // https://localhost:4040/dist/auth/callback#error=access_denied
                         if (href.indexOf(this.oAuthCallbackUrl) == 0) {
                             clearInterval(this.intervalId);
                             var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));

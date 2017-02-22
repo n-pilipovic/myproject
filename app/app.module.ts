@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { ButtonModule, MenuModule } from 'primeng/primeng';
+import { ButtonModule, MenuModule, ChipsModule } from 'primeng/primeng';
 
 import { AppComponent } from './app.component';
 import { InboxModule } from './inbox/inbox.module';
@@ -26,8 +26,10 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
     imports: [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpModule,
         ButtonModule,
+        ChipsModule,
         MenuModule,
         InboxModule,
         routing

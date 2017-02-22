@@ -40,7 +40,7 @@ export class MailInboxComponent implements OnInit {
 
     onScroll() {
         let token = this.mailService.PageToken;
-        this.mailService.getAllMails('', this.mailService.PageToken).subscribe((data: RecievedMail[]) => {
+        this.mailService.getAllMails('', token).subscribe((data: RecievedMail[]) => {
             this.mails = data;
         });
     }
