@@ -3,6 +3,7 @@
 
 # Project related
 node_modules/*
+npm-debug*
 typings/*
 app/**/*.js
 app/**/*.js.map

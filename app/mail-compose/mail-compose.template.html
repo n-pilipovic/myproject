@@ -11,9 +11,15 @@
 		</div>
 		<div class="form-group">
 			<p-chips class="form-control" id="cc" name="cc" placeholder="Cc" formControlName="cc"></p-chips>
+			<div *ngIf="composeform.controls['cc'].hasError('pattern') && composeform.controls['cc'].touched">
+				Email can be sent only to valid email addresses.
+			</div>
 		</div>
 		<div class="form-group">
 			<p-chips class="form-control" id="bcc" name="bcc" placeholder="Bcc" formControlName="bcc"></p-chips>
+			<div *ngIf="composeform.controls['bcc'].hasError('pattern') && composeform.controls['bcc'].touched">
+				Email can be sent only to valid email addresses.
+			</div>
 		</div>
 
 		<div class="form-group">
