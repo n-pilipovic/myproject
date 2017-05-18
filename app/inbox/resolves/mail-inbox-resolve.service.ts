@@ -10,7 +10,7 @@ import { UtilHelper } from '../../utils/util.helper';
 @Injectable()
 export class MailInboxResolve implements Resolve<RecievedMail[]> {
     constructor(private mailService: MailService, private router: Router, private utilHelper: UtilHelper) { }
-    resolve(): Observable<any> | boolean {
+    resolve(): Observable<any> | Promise<any> {
         return this.mailService.getAllMails().map((data: RecievedMail[]) => {
             if (data) {
                 let emails;

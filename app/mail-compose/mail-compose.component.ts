@@ -37,7 +37,7 @@ export class MailComposeComponent implements OnInit {
     }
 
     sendMail() {
-        this.mailService.sendMail(this.mail)
+        this.mailService.sendMail(this.composeform.value)
             .subscribe(res => {
                 console.log(res);
                 this.info.msg = 'Sent!';

@@ -43,7 +43,7 @@ export class AuthService {
         this.userProfile = JSON.parse(localStorage.getItem('profile'));
     }
 
-    public login(path) {
+    public login(path:string) {
         // Call the method to redirect to google for getting access token.
         this.getAccess(path);
     };
@@ -100,7 +100,7 @@ export class AuthService {
                     if (found) {
                         console.log('Callback URL: ', href);
                         clearInterval(this.intervalId);
-                        var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
+                        var pathData:any = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
                         var expiresSeconds = Number(pathData.expires_in) || 1800;
                         this.token = pathData.access_token;
                         if (this.token) {
@@ -124,7 +124,7 @@ export class AuthService {
                         // https://localhost:4040/dist/auth/callback#error=access_denied
                         if (href.indexOf(this.oAuthCallbackUrl) == 0) {
                             clearInterval(this.intervalId);
-                            var pathData = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
+                            var pathData:any = this.parse(href.substr(this.oAuthCallbackUrl.length + 1));
                             this.windowHandle.close();
                         }
                     }
@@ -151,7 +151,7 @@ export class AuthService {
         }
     }
 
-    private parse(str) { // lifted from https://github.com/sindresorhus/query-string
+    private parse(str:string) { // lifted from https://github.com/sindresorhus/query-string
         if (typeof str !== 'string') {
             return {};
         }
@@ -160,7 +160,7 @@ export class AuthService {
         if (!str) {
             return {};
         }
-        return str.split('&').reduce(function (ret, param) {
+        return str.split('&').reduce(function (ret:Object, param) {
             var parts = param.replace(/\+/g, ' ').split('=');
             // Firefox (pre 40) decodes `%3D` to `=`
             // https://github.com/sindresorhus/query-string/pull/37
